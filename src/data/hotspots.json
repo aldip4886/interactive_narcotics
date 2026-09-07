@@ -7,6 +7,12 @@
     { "id": "pelvis",        "label": "Area Panggul", "icon": "🩲" },
     { "id": "limbs",         "label": "Anggota Gerak", "icon": "🦵" }
   ],
+  "viewAngles": [
+    { "angle": 0,   "label": "Tampak Depan",         "sub": "Organ Pencernaan & Dada",  "image": "assets/body_views/body_view_0_front.png" },
+    { "angle": 90,  "label": "Tampak Samping Kanan", "sub": "Profil Usus & Tungkai",    "image": "assets/body_views/body_view_1_right.png" },
+    { "angle": 180, "label": "Tampak Belakang",      "sub": "Punggung, Ginjal & Panggul","image": "assets/body_views/body_view_2_back.png" },
+    { "angle": 270, "label": "Tampak Samping Kiri",  "sub": "Profil Tulang & Pelvis",   "image": "assets/body_views/body_view_3_left.png" }
+  ],
   "hotspots": [
     {
       "id": "saluran-cerna",
@@ -17,15 +23,22 @@
       "tag": "BODY PACKING / SWALLOWING",
       "categoryId": "abdomen",
       "categoryLabel": "Perut",
-      "view": "front",
-      "coords2D": { "x": 36, "y": 42 },
+      "primaryAngle": 0,
+      "visibleAngles": [0, 90],
+      "coordsByAngle": {
+        "0":  { "x": 50, "y": 41 },
+        "90": { "x": 53, "y": 41 }
+      },
       "position3D": { "x": 0.0, "y": 1.18, "z": 0.098 },
       "cameraAngle": "front-torso",
       "riskLevel": "critical",
       "riskScore": 100,
+      "drugTypes": "Kokain murni, Heroin kristal, Pil Ekstasi berdensitas tinggi",
+      "packagingTechnique": "Kondom lateks berlapis (3-7 lapis) dipres rapat dengan lilin parafin dan selotip medis kedap udara",
       "mainIllustration": "assets/mockup/card_digestive_main.png",
       "thumb": "assets/mockup/thumb_saluran_cerna.jpg",
       "description": "Kurir menelan puluhan hingga ratusan kapsul/kondom berisi narkotika (sering kali kokain atau heroin) untuk disembunyikan di dalam saluran pencernaan (lambung dan usus) selama perjalanan.",
+      "modusDetail": "Pelaku biasanya dipersiapkan 24-48 jam sebelum keberangkatan dengan meminum obat penekan motilitas usus (Loperamide). Setiap paket berbobot antara 8-12 gram dengan total berat muatan mencapai 1 hingga 2 kilogram narkotika murni.",
       "findings": [
         {
           "thumb": "assets/mockup/finding_capsules.jpg",
@@ -58,7 +71,7 @@
         "Isolasi di ruangan observasi medis khusus hingga proses evakuasi BAB tuntas",
         "Dokumentasi forensik barang bukti dan koordinasi dengan penyidik penindakan"
       ],
-      "medicalRisk": "KRITIS: Ruptur satu kapsul saja dapat memicu intoksikasi fatal dan henti jantung dalam hitungan menit. DILARANG memberi obat pencahar stimulan paksa tanpa pengawasan dokter!",
+      "medicalRisk": "KRITIS: Ruptur satu kapsul saja dapat memicu intoksikasi fatal dan henti jantung dalam hitungan menit. DILARANG memberi obat pencahar stimulan paksa tanpa pengawasan dokter spesialis!",
       "inspectionNote": "Wajib dirujuk ke fasilitas kesehatan rujukan DJBC. Petugas tidak boleh melakukan intervensi fisik invasif mandiri."
     },
     {
@@ -70,15 +83,22 @@
       "tag": "ORAL CONCEALMENT / BODY STUFFING",
       "categoryId": "head-mouth",
       "categoryLabel": "Kepala & Mulut",
-      "view": "front",
-      "coords2D": { "x": 36, "y": 17 },
+      "primaryAngle": 0,
+      "visibleAngles": [0, 90],
+      "coordsByAngle": {
+        "0":  { "x": 50, "y": 12 },
+        "90": { "x": 55, "y": 12 }
+      },
       "position3D": { "x": 0.0, "y": 1.66, "z": 0.088 },
       "cameraAngle": "front-head",
       "riskLevel": "high",
       "riskScore": 75,
+      "drugTypes": "Sabu (Methamphetamine), Kokain, Pil Heroin / Fentanyl",
+      "packagingTechnique": "Bungkusan plastik tipis, balon kecil, atau kapsul tanpa pengaman tebal (spontan)",
       "mainIllustration": "assets/mockup/thumb_mulut.jpg",
       "thumb": "assets/mockup/thumb_mulut.jpg",
       "description": "Penyembunyian paket kecil narkotika di bawah lidah, kantung pipi, atau ditelan mendadak (body stuffing) saat subjek dihentikan atau dicurigai oleh petugas di area border.",
+      "modusDetail": "Berbeda dengan body packing terencana, body stuffing di mulut sering dilakukan secara panik saat tersangka melihat pemeriksaan petugas. Paket rentan pecah akibat gigitan gigi geraham.",
       "findings": [
         {
           "thumb": "assets/mockup/thumb_mulut.jpg",
@@ -111,8 +131,8 @@
         "Pemeriksaan usap (trace detection swab) pada bibir dan ujung jari",
         "Segera bawa ke tim medis jika tampak tanda tersedak atau keracunan akut"
       ],
-      "medicalRisk": "TINGGI: Risiko aspirasi jalan napas (tersedak/asfiksia) dan ruptur paket akibat gigitan yang memicu overdosis kilat.",
-      "inspectionNote": "Gunakan sarung tangan nitril dan penerangan memadai. Jangan memasukkan jari petugas ke mulut subjek untuk menghindari gigitan."
+      "medicalRisk": "TINGGI: Risiko asfiksia (tersedak/sumbatan jalan napas) dan keracunan fatal kilat jika bungkusan tergigit atau robek.",
+      "inspectionNote": "Gunakan sarung tangan nitril. Jangan memasukkan jari tangan petugas ke dalam mulut subjek untuk menghindari gigitan berbahaya."
     },
     {
       "id": "di-balik-pakaian",
@@ -123,15 +143,22 @@
       "tag": "BODY STRAPPING / TORSO",
       "categoryId": "chest",
       "categoryLabel": "Dada & Punggung",
-      "view": "back",
-      "coords2D": { "x": 68, "y": 28 },
+      "primaryAngle": 180,
+      "visibleAngles": [180, 270],
+      "coordsByAngle": {
+        "180": { "x": 50, "y": 25 },
+        "270": { "x": 47, "y": 26 }
+      },
       "position3D": { "x": 0.0, "y": 1.25, "z": -0.12 },
       "cameraAngle": "back-torso",
       "riskLevel": "medium",
       "riskScore": 60,
+      "drugTypes": "Methamphetamine kristal (Sabu), Heroin blok, Ketamine",
+      "packagingTechnique": "Paket pipih dibungkus aluminium foil dan karbon anti-K9, dilakban tebal menggunakan korset neoprena",
       "mainIllustration": "assets/mockup/thumb_pakaian.jpg",
       "thumb": "assets/mockup/thumb_pakaian.jpg",
       "description": "Paket narkotika ditempelkan mengelilingi dada, rusuk, atau punggung menggunakan lakban tebal, perban elastis medis, atau korset khusus di balik pakaian luar yang longgar.",
+      "modusDetail": "Paket dirancang mengikuti kontur tulang rusuk dan punggung untuk meminimalkan tonjolan visual. Sering disamarkan dengan memakai baju bertumpuk, rompi wol, atau jaket musim dingin tebal.",
       "findings": [
         {
           "thumb": "assets/mockup/thumb_pakaian.jpg",
@@ -164,8 +191,8 @@
         "Skrining pelacakan anjing pelacak K-9 Bea Cukai di koridor kedatangan",
         "Lepaskan jaket dan pakaian luar untuk verifikasi kontur tubuh"
       ],
-      "medicalRisk": "SEDANG: Iritasi kulit akibat lem perekat. Risiko penyerapan zat melalui kulit bila kemasan bocor (terutama Fentanyl).",
-      "inspectionNote": "Wajib dilakukan di ruang tertutup oleh petugas dengan jenis kelamin yang sama sesuai SOP DJBC."
+      "medicalRisk": "SEDANG: Iritasi kulit akibat lem perekat kimia. Bahaya penyerapan zat melalui pori-pori kulit (transdermal) bila paket bocor.",
+      "inspectionNote": "Pemeriksaan badan pat-down WAJIB dilaksanakan di ruang tertutup oleh petugas dengan jenis kelamin yang sama."
     },
     {
       "id": "anggota-gerak",
@@ -176,15 +203,24 @@
       "tag": "LIMBS STRAPPING",
       "categoryId": "limbs",
       "categoryLabel": "Anggota Gerak",
-      "view": "front",
-      "coords2D": { "x": 36, "y": 72 },
+      "primaryAngle": 0,
+      "visibleAngles": [0, 90, 180, 270],
+      "coordsByAngle": {
+        "0":   { "x": 42, "y": 72 },
+        "90":  { "x": 50, "y": 72 },
+        "180": { "x": 42, "y": 72 },
+        "270": { "x": 50, "y": 72 }
+      },
       "position3D": { "x": 0.12, "y": 0.55, "z": 0.05 },
       "cameraAngle": "front-legs",
       "riskLevel": "high",
       "riskScore": 68,
+      "drugTypes": "Sabu, Kokain serbuk, Ekstasi kemasan strip",
+      "packagingTechnique": "Paket melengkung disesuaikan kurvatur paha/betis, diselotip medis ketat atau dijahit di balik kaus kaki",
       "mainIllustration": "assets/mockup/thumb_anggota_gerak.jpg",
       "thumb": "assets/mockup/thumb_anggota_gerak.jpg",
       "description": "Narkotika dilekatkan pada paha bagian dalam, sekeliling betis, atau disembunyikan di dalam kaos kaki tebal dan rongga sol sepatu yang dimodifikasi.",
+      "modusDetail": "Kurir mengandalkan langkah cepat agar tidak terpantau lama. Penempatan di sela paha dalam memanfaatkan keengganan petugas melakukan rabaan sensitif.",
       "findings": [
         {
           "thumb": "assets/mockup/thumb_anggota_gerak.jpg",
@@ -217,7 +253,7 @@
         "Penggunaan tongkat detektor densitas nirkabel",
         "Pengamatan rekaman CCTV mobilitas subjek sejak tiba di terminal kedatangan"
       ],
-      "medicalRisk": "SEDANG: Gangguan sirkulasi darah (iskemia) jika lakban diikat terlalu ketat dalam waktu lama.",
+      "medicalRisk": "SEDANG: Risiko iskemia atau sumbatan sirkulasi darah bila lakban diikat terlalu kuat selama penerbangan jarak jauh.",
       "inspectionNote": "Periksa bagian lipatan celana dalam dan sol sepatu secara seksama."
     },
     {
@@ -229,15 +265,22 @@
       "tag": "PELVIS STRAPPING & CAVITY INSERTION",
       "categoryId": "pelvis",
       "categoryLabel": "Area Panggul",
-      "view": "back",
-      "coords2D": { "x": 68, "y": 55 },
+      "primaryAngle": 180,
+      "visibleAngles": [180, 270],
+      "coordsByAngle": {
+        "180": { "x": 50, "y": 53 },
+        "270": { "x": 52, "y": 53 }
+      },
       "position3D": { "x": 0.0, "y": 0.85, "z": -0.08 },
       "cameraAngle": "back-pelvis",
       "riskLevel": "critical",
       "riskScore": 95,
+      "drugTypes": "Heroin murni, Kokain, Fentanyl serbuk konsentrat",
+      "packagingTechnique": "Silinder padat lateks berlapis tebal dengan lubang benang pengait penarik atau kapsul pelumas khusus",
       "mainIllustration": "assets/mockup/thumb_panggul.jpg",
       "thumb": "assets/mockup/thumb_panggul.jpg",
       "description": "Paket narkotika disembunyikan di lipatan selangkangan/pantat atau disisipkan ke dalam rongga tubuh alami (rektum/vagina) dengan pelumas khusus.",
+      "modusDetail": "Merupakan salah satu metode paling berisiko tinggi. Satu kurir dapat membawa 1-5 paket silinder besar dengan berat total 250-600 gram di dalam rongga tubuh bawah.",
       "findings": [
         {
           "thumb": "assets/mockup/thumb_panggul.jpg",
@@ -282,15 +325,22 @@
       "tag": "HEAD & HAIR CONCEALMENT",
       "categoryId": "head-mouth",
       "categoryLabel": "Kepala & Mulut",
-      "view": "front",
-      "coords2D": { "x": 36, "y": 8 },
+      "primaryAngle": 180,
+      "visibleAngles": [180, 0],
+      "coordsByAngle": {
+        "180": { "x": 50, "y": 6 },
+        "0":   { "x": 50, "y": 6 }
+      },
       "position3D": { "x": 0.0, "y": 1.78, "z": 0.02 },
       "cameraAngle": "front-head",
       "riskLevel": "medium",
       "riskScore": 55,
+      "drugTypes": "Kokain, Sabu, Pil MDMA / LSD microdot",
+      "packagingTechnique": "Paket pipih dijahit pada jaring rambut palsu (wig) atau diselipkan di dalam rongga gulungan rambut gimbal",
       "mainIllustration": "assets/mockup/thumb_rambut.jpg",
       "thumb": "assets/mockup/thumb_rambut.jpg",
       "description": "Narkotika dikemas dalam kapsul pipih atau bungkusan mikro yang disembunyikan di dalam sanggul tebal, jalinan rambut palsu (wig/hairpiece), rambut dreadlock/gimbal, atau topi berlapis.",
+      "modusDetail": "Memanfaatkan norma kesopanan agar petugas ragu memeriksa area kepala subjek. Digunakan terutama oleh kurir wanita atau subjek berambut gimbal/wig khusus tebal.",
       "findings": [
         {
           "thumb": "assets/mockup/thumb_rambut.jpg",
@@ -323,7 +373,7 @@
         "Pemeriksaan usap (trace wipe) pada permukaan rambut dan sisir bawaan",
         "Pemindaian sinar-X bagasi untuk penutup kepala atau topi berbantalan"
       ],
-      "medicalRisk": "RENDAH: Risiko iritasi kulit kepala akibat bahan kimia perekat.",
+      "medicalRisk": "RENDAH: Risiko iritasi kulit kepala akibat bahan kimia perekat sintetis.",
       "inspectionNote": "Lakukan pemeriksaan di ruang privat jika subjek mengenakan hijab atau wig sensitif, dengan tetap mengedepankan etika humanis."
     },
     {
@@ -335,15 +385,22 @@
       "tag": "SURGICAL IMPLANT & PROSTHETIC",
       "categoryId": "chest",
       "categoryLabel": "Dada",
-      "view": "front",
-      "coords2D": { "x": 36, "y": 28 },
+      "primaryAngle": 0,
+      "visibleAngles": [0, 90],
+      "coordsByAngle": {
+        "0":  { "x": 43, "y": 24 },
+        "90": { "x": 57, "y": 24 }
+      },
       "position3D": { "x": 0.08, "y": 1.35, "z": 0.12 },
       "cameraAngle": "front-torso",
       "riskLevel": "critical",
       "riskScore": 90,
+      "drugTypes": "Kokain cair (Liquid Cocaine), Heroin cair",
+      "packagingTechnique": "Kantung implan silikon medis palsu yang disuntikkan cairan narkotika berkonsentrasi tinggi",
       "mainIllustration": "assets/mockup/thumb_payudara.jpg",
       "thumb": "assets/mockup/thumb_payudara.jpg",
-      "description": "Narkotika cair (liquid cocaine) atau serbuk dimasukkan ke dalam kantung silikon implan bedah melalui operasi bedah ilegal atau disamarkan di dalam busa bra berkantung khusus.",
+      "description": "Narkotika cair (liquid cocaine) atau serbuk dimasukkan ke dalam kantung silikon implan bedah melalui operasi bedah ilegal atau disamarkan di dalam bra berkantung khusus.",
+      "modusDetail": "Operasi pemasangan implan biasanya dilakukan beberapa hari sebelum jadwal penerbangan di klinik ilegal luar negeri. Sangat berbahaya karena luka sayat sering belum menutup sempurna.",
       "findings": [
         {
           "thumb": "assets/mockup/thumb_payudara.jpg",
@@ -388,15 +445,24 @@
       "tag": "MEDICAL PROSTHETICS & CASTS",
       "categoryId": "all",
       "categoryLabel": "Seluruh Tubuh",
-      "view": "front",
-      "coords2D": { "x": 68, "y": 80 },
+      "primaryAngle": 270,
+      "visibleAngles": [270, 0, 90, 180],
+      "coordsByAngle": {
+        "270": { "x": 52, "y": 86 },
+        "0":   { "x": 56, "y": 86 },
+        "90":  { "x": 52, "y": 86 },
+        "180": { "x": 56, "y": 86 }
+      },
       "position3D": { "x": 0.0, "y": 0.9, "z": 0.0 },
       "cameraAngle": "front-full",
       "riskLevel": "high",
       "riskScore": 70,
+      "drugTypes": "Heroin murni padat, Kokain batu, Sabu kristal",
+      "packagingTechnique": "Dicetak menyatu dengan lapisan gips semen atau disembunyikan di dalam pipa tabung kursi roda",
       "mainIllustration": "assets/mockup/thumb_lainnya.jpg",
       "thumb": "assets/mockup/thumb_lainnya.jpg",
       "description": "Penyelundupan dengan menyamarkan narkotika di dalam gips tiruan pada kaki/tangan patah, perban luka palsu, rangka kursi roda, tongkat ketiak, atau korset terapi ortopedi.",
+      "modusDetail": "Pelaku menyalahgunakan empati petugas terhadap penumpang berkebutuhan khusus atau orang sakit. Narkotika dipadatkan menjadi bentuk anatomis menyerupai balutan plester gips asli.",
       "findings": [
         {
           "thumb": "assets/mockup/thumb_lainnya.jpg",

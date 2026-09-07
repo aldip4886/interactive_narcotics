@@ -133,9 +133,9 @@
           </div>
 
           <!-- Switcher Mode 2D Mockup / 3D Model -->
-          <button id="btn-toggle-viewmode" class="mode-pill-btn" title="Beralih Tampilan Ilustrasi / 3D Interaktif">
+          <button id="btn-toggle-viewmode" class="mode-pill-btn" title="Beralih Tampilan Model 3D / Anatomi 4-Sisi">
             <span class="pill-icon">🔄</span>
-            <span id="viewmode-label">Mode: Ilustrasi 2D</span>
+            <span id="viewmode-label">Mode: Anatomi 4-Sisi</span>
           </button>
 
           <!-- Help Button -->
@@ -162,21 +162,25 @@
 
         <!-- Top-Right Step Navigation Pills -->
         <div class="step-nav-pills" id="step-nav-pills">
-          <button class="step-pill active" data-step="1">
+          <button class="step-pill active" data-tab-target="tab-modus">
             <span class="step-num">1</span>
             <span class="step-name">Informasi Modus</span>
           </button>
-          <button class="step-pill" data-step="2">
+          <button class="step-pill" data-tab-target="tab-photos">
             <span class="step-num">2</span>
-            <span class="step-name">Indikator Risiko</span>
+            <span class="step-name">Foto Gambar Real</span>
           </button>
-          <button class="step-pill" data-step="3">
+          <button class="step-pill" data-tab-target="tab-detection">
             <span class="step-num">3</span>
-            <span class="step-name">Tindakan Pemeriksaan</span>
+            <span class="step-name">Metode Pengungkapan</span>
           </button>
-          <button class="step-pill quiz-step-pill" data-step="4" id="btn-open-quiz">
+          <button class="step-pill" data-tab-target="tab-risk">
             <span class="step-num">4</span>
-            <span class="step-name">Latihan (Kuis)</span>
+            <span class="step-name">Risiko Bahaya</span>
+          </button>
+          <button class="step-pill quiz-step-pill" id="btn-open-quiz">
+            <span class="step-num">📝</span>
+            <span class="step-name">Kuis Evaluasi</span>
           </button>
         </div>
       </div>
@@ -184,69 +188,45 @@
       <!-- Main Stage Split: Central Body Stage (Left) & Detailed Card (Right) -->
       <div id="content-workspace">
 
-        <!-- ─── A. CENTRAL BODY VISUALIZATION STAGE ─── -->
+        <!-- ─── A. CENTRAL BODY ROTATING STAGE ─── -->
         <section id="body-stage-container">
-          <!-- 2D Dual View Visualization (Default High-Fidelity Mockup) -->
-          <div id="dual-body-view" class="dual-body-view">
-            <!-- View Labels -->
-            <div class="view-header-row">
-              <div class="view-tag-badge">Tampak Depan</div>
-              <div class="view-tag-badge">Tampak Belakang</div>
-            </div>
+          <!-- 4-Angle Rotating Body Viewer -->
+          <div id="rotatable-body-view" class="rotatable-body-view">
 
-            <!-- Stage Background Image from Mockup -->
-            <div class="body-canvas-wrapper" id="body-canvas-wrapper">
-              <img src="assets/mockup/dual_body_scene.png" alt="Anatomi Tubuh Kurir Narkotika" id="dual-body-img" class="dual-body-img" />
-
-              <!-- Interactive Hotspot Pins Layer -->
-              <div id="hotspots-layer" class="hotspots-layer">
-                <!-- Pin 1: Dalam Mulut -->
-                <div class="body-hotspot-pin" data-id="dalam-mulut" style="left: 31%; top: 12%;">
-                  <div class="pin-badge">
-                    <span class="pin-num">1</span>
-                    <span class="pin-title">Dalam Mulut (Swallowing)</span>
-                  </div>
-                  <div class="pin-point"></div>
-                </div>
-
-                <!-- Pin 2: Saluran Cerna (Active default) -->
-                <div class="body-hotspot-pin active" data-id="saluran-cerna" style="left: 32%; top: 41%;">
-                  <div class="pin-badge gold-highlight">
-                    <span class="pin-num">2</span>
-                    <span class="pin-title">Saluran Cerna (Body Packing)</span>
-                  </div>
-                  <div class="pin-point"></div>
-                </div>
-
-                <!-- Pin 3: Anggota Gerak -->
-                <div class="body-hotspot-pin" data-id="anggota-gerak" style="left: 31%; top: 78%;">
-                  <div class="pin-badge">
-                    <span class="pin-num">3</span>
-                    <span class="pin-title">Pada Anggota Gerak (Strapping)</span>
-                  </div>
-                  <div class="pin-point"></div>
-                </div>
-
-                <!-- Pin 4: Di Balik Pakaian -->
-                <div class="body-hotspot-pin" data-id="di-balik-pakaian" style="left: 69%; top: 22%;">
-                  <div class="pin-badge">
-                    <span class="pin-num">4</span>
-                    <span class="pin-title">Di Balik Pakaian (Strapping)</span>
-                  </div>
-                  <div class="pin-point"></div>
-                </div>
-
-                <!-- Pin 5: Pada Area Panggul -->
-                <div class="body-hotspot-pin" data-id="area-panggul" style="left: 70%; top: 57%;">
-                  <div class="pin-badge">
-                    <span class="pin-num">5</span>
-                    <span class="pin-title">Pada Area Panggul (Strapping)</span>
-                  </div>
-                  <div class="pin-point"></div>
-                </div>
+            <!-- Angle Status Badge & Quick Angle Pills -->
+            <div class="angle-header-bar">
+              <div class="current-angle-badge" id="current-angle-badge">
+                <span class="angle-deg" id="angle-deg-text">0°</span>
+                <span class="angle-sep">•</span>
+                <span class="angle-name" id="angle-name-text">Tampak Depan</span>
+                <span class="angle-sub" id="angle-sub-text">(Organ Pencernaan & Dada)</span>
               </div>
 
-              <!-- SVG Animated Wipe Connector Line -->
+              <!-- Quick Angle Switch Pills -->
+              <div class="quick-angle-buttons">
+                <button class="angle-quick-btn active" data-angle="0">Depan (0°)</button>
+                <button class="angle-quick-btn" data-angle="90">Kanan (90°)</button>
+                <button class="angle-quick-btn" data-angle="180">Belakang (180°)</button>
+                <button class="angle-quick-btn" data-angle="270">Kiri (270°)</button>
+                <button class="angle-autorotate-btn" id="btn-toggle-autorotate" title="Putar Otomatis 360°">
+                  <span id="autorotate-icon">▶</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Body Canvas & Hotspot Layer -->
+            <div class="body-canvas-wrapper" id="body-canvas-wrapper">
+              <!-- Central Active Body Image (Changes with slider rotation) -->
+              <div class="body-image-container" id="body-image-container">
+                <img src="assets/body_views/body_view_0_front.png" alt="Anatomi Tubuh Peraga Manusia" id="main-body-img" class="main-body-img" />
+              </div>
+
+              <!-- Interactive Hotspot Pins Layer (Dynamically positioned per angle) -->
+              <div id="hotspots-layer" class="hotspots-layer">
+                <!-- Injected & Updated by main.js based on current angle -->
+              </div>
+
+              <!-- SVG Animated Wipe Connector Line linking active pin directly to tabbed card -->
               <svg id="stage-connector-svg" class="stage-connector-svg">
                 <defs>
                   <filter id="gold-glow-filter" x="-20%" y="-20%" width="140%" height="140%">
@@ -257,20 +237,44 @@
                     </feMerge>
                   </filter>
                 </defs>
-                <line id="stage-line-glow" stroke="#F5A623" stroke-width="6" stroke-opacity="0.25" stroke-linecap="round"/>
+                <line id="stage-line-glow" stroke="#F5A623" stroke-width="6" stroke-opacity="0.28" stroke-linecap="round"/>
                 <line id="stage-line-core" stroke="#F5A623" stroke-width="2.5" stroke-linecap="round" filter="url(#gold-glow-filter)"/>
-                <circle id="stage-circle-start" r="5" fill="#F5A623" stroke="#FFFFFF" stroke-width="2"/>
+                <circle id="stage-circle-start" r="5.5" fill="#F5A623" stroke="#FFFFFF" stroke-width="2"/>
                 <circle id="stage-circle-end" r="4.5" fill="#F5A623" stroke="#FFFFFF" stroke-width="2"/>
               </svg>
+
+              <!-- Drag / Swipe to rotate hint -->
+              <div class="body-drag-hint">
+                <span>⟲ Geser kursor untuk memutar sudut tubuh ⟳</span>
+              </div>
             </div>
-          </div>
+
+            <!-- ─── SLIDER ROTATION CONTROL BAR ─── -->
+            <div class="rotation-slider-dock">
+              <div class="slider-row">
+                <span class="slider-label-left">0° Depan</span>
+                <div class="slider-track-wrap">
+                  <input type="range" id="body-rotation-slider" min="0" max="360" step="1" value="0" aria-label="Rotasi Tubuh Manusia" />
+                  <div class="slider-ticks">
+                    <span class="tick" style="left: 0%;">0°</span>
+                    <span class="tick" style="left: 25%;">90°</span>
+                    <span class="tick" style="left: 50%;">180°</span>
+                    <span class="tick" style="left: 75%;">270°</span>
+                    <span class="tick" style="left: 100%;">360°</span>
+                  </div>
+                </div>
+                <span class="slider-label-right">360°</span>
+              </div>
+            </div>
+
+          </div><!-- /#rotatable-body-view -->
 
           <!-- 3D Three.js Model Container (Toggled via 3D mode) -->
           <div id="three-stage-container" class="three-stage-container hidden">
             <canvas id="three-canvas"></canvas>
             <div class="pedestal-rotate-hint">
               <span class="rotate-icon">⟲ 360° ⟳</span>
-              <span>Putar & Zoom Model 3D</span>
+              <span>Putar & Zoom Model 3D Interaktif</span>
             </div>
             <div class="three-toolbar">
               <button id="btn-xray" class="three-tool-btn">
@@ -283,94 +287,168 @@
           </div>
         </section>
 
-        <!-- ─── B. RIGHT DETAIL CARD PANEL ─── -->
+        <!-- ─── B. RIGHT DETAIL TABBED CARD PANEL ─── -->
         <section id="detail-card-panel">
           <div class="detail-card-inner" id="active-detail-card">
 
-            <!-- Card Top Header -->
+            <!-- Card Header: Modus Number Badge, Category & Title -->
             <div class="detail-header">
-              <div class="detail-header-text">
+              <div class="detail-header-top">
                 <div class="detail-badge-row">
                   <span id="detail-tag-badge" class="detail-tag-badge">MODUS #01</span>
-                  <span id="detail-cat-badge" class="detail-cat-badge">SALURAN PENCERNAAN</span>
+                  <span id="detail-cat-badge" class="detail-cat-badge">PERUT</span>
+                  <span id="detail-risk-badge" class="detail-risk-pill risk-critical">KRITIS (100)</span>
                 </div>
-                <h3 id="detail-title" class="detail-title">Saluran Cerna (Body Packing / Swallowing)</h3>
-              </div>
-            </div>
-
-            <!-- Card Media & Description Row -->
-            <div class="detail-media-row">
-              <div class="detail-illustration-box">
-                <img id="detail-main-img" src="assets/mockup/card_digestive_main.png" alt="Visualisasi Saluran Cerna" class="detail-main-img" />
-              </div>
-              <div class="detail-desc-box">
-                <p id="detail-desc" class="detail-desc-text">
-                  Kurir menelan puluhan hingga ratusan kapsul/kondom berisi narkotika (sering kali kokain atau heroin) untuk disembunyikan di dalam saluran pencernaan (lambung dan usus) selama perjalanan.
-                </p>
-              </div>
-            </div>
-
-            <!-- Section: Contoh Temuan (3 Clickable Photo Thumbnails) -->
-            <div class="detail-findings-section">
-              <div class="findings-header">
-                <span class="findings-icon">📷</span>
-                <span class="findings-title">Contoh Temuan:</span>
-              </div>
-              <div class="findings-thumbnails-grid" id="findings-thumbnails-grid">
-                <!-- Injected via JavaScript for lightbox & zoom -->
-                <a href="assets/mockup/finding_capsules.jpg" class="finding-thumb-item glightbox" data-gallery="findings-gallery" data-title="Kapsul / Pellets Narkotika (Latex/Kondom Berlapis)">
-                  <img src="assets/mockup/finding_capsules.jpg" alt="Temuan Kapsul" />
-                  <span class="finding-thumb-label">Kapsul / Pellets</span>
-                </a>
-                <a href="assets/mockup/finding_xray.jpg" class="finding-thumb-item glightbox" data-gallery="findings-gallery" data-title="Citra X-Ray Abdomen (Rosette Sign & Radiopaque Pellets)">
-                  <img src="assets/mockup/finding_xray.jpg" alt="Temuan X-Ray" />
-                  <span class="finding-thumb-label">Citra X-Ray Abdomen</span>
-                </a>
-                <a href="assets/mockup/finding_opened.jpg" class="finding-thumb-item glightbox" data-gallery="findings-gallery" data-title="Kemasan Terbuka Menampakkan Serbuk Narkotika Murni">
-                  <img src="assets/mockup/finding_opened.jpg" alt="Temuan Barang Bukti" />
-                  <span class="finding-thumb-label">Kapsul Terbuka / BB</span>
-                </a>
-              </div>
-            </div>
-
-            <!-- Section: 2 Columns (Indikator Risiko & Tindakan Pemeriksaan) -->
-            <div class="detail-two-cols">
-              <!-- Left Column: Indikator Risiko -->
-              <div class="info-block-col block-warning" id="block-indicators">
-                <div class="block-header">
-                  <span class="block-icon warning-icon">!</span>
-                  <span class="block-title">Indikator Risiko</span>
+                <div class="card-quick-nav">
+                  <button id="btn-prev-hotspot" class="card-nav-arrow-btn" title="Modus Sebelumnya">←</button>
+                  <span id="card-nav-counter" class="card-nav-counter">1 / 8</span>
+                  <button id="btn-next-hotspot" class="card-nav-arrow-btn" title="Modus Berikutnya">→</button>
                 </div>
-                <ul id="detail-indicators-list" class="block-list">
-                  <li>Menolak makan atau minum sama sekali selama perjalanan</li>
-                  <li>Penggunaan obat anti-diare secara berlebihan (Loperamide)</li>
-                  <li>Gugup ekstrem, keringat dingin, postur tubuh tegang kaku</li>
-                  <li>Bau mulut khas lateks atau pembungkus karet/plastik</li>
-                </ul>
               </div>
+              <h3 id="detail-title" class="detail-title">Saluran Cerna (Body Packing)</h3>
+              <p id="detail-subtitle" class="detail-subtitle">Penyelundupan narkotika dengan metode menelan paket ke dalam organ pencernaan.</p>
+            </div>
 
-              <!-- Right Column: Tindakan Pemeriksaan -->
-              <div class="info-block-col block-procedure" id="block-detection">
-                <div class="block-header">
-                  <span class="block-icon procedure-icon">✔</span>
-                  <span class="block-title">Tindakan Pemeriksaan</span>
+            <!-- ─── TAB NAVIGATION BAR (4 TABS) ─── -->
+            <div class="card-tabs-nav" id="card-tabs-nav">
+              <button class="tab-btn active" data-tab="tab-modus">
+                <span class="tab-icon">📋</span>
+                <span class="tab-label">Modus Operandi</span>
+              </button>
+              <button class="tab-btn" data-tab="tab-photos">
+                <span class="tab-icon">📷</span>
+                <span class="tab-label">Foto Gambar Real</span>
+              </button>
+              <button class="tab-btn" data-tab="tab-detection">
+                <span class="tab-icon">🔍</span>
+                <span class="tab-label">Pengungkapan</span>
+              </button>
+              <button class="tab-btn" data-tab="tab-risk">
+                <span class="tab-icon">🚨</span>
+                <span class="tab-label">Risiko Bahaya</span>
+              </button>
+            </div>
+
+            <!-- ─── TAB CONTENTS ─── -->
+            <div class="tab-content-container" id="tab-content-container">
+
+              <!-- TAB 1: DETAIL MODUS OPERANDI -->
+              <div class="tab-pane active" id="tab-modus">
+                <!-- Media & Description Row -->
+                <div class="detail-media-row">
+                  <div class="detail-illustration-box">
+                    <img id="detail-main-img" src="assets/mockup/card_digestive_main.png" alt="Visualisasi Saluran Cerna" class="detail-main-img" />
+                  </div>
+                  <div class="detail-desc-box">
+                    <p id="detail-desc" class="detail-desc-text"></p>
+                  </div>
                 </div>
-                <ul id="detail-detection-list" class="block-list">
-                  <li>Wawancara mendalam & analisis profil risiko kesesuaian tiket</li>
-                  <li>Pemeriksaan Sinar-X Abdomen / CT Scan di RS rujukan DJBC</li>
-                  <li>Isolasi di ruangan medis khusus hingga proses BAB tuntas</li>
-                  <li>Dokumentasi forensik BB & koordinasi penyidik penindakan</li>
-                </ul>
-              </div>
-            </div>
 
-            <!-- Medical Risk & Legal Note Alert Strip -->
-            <div class="detail-alert-strip" id="detail-alert-strip">
-              <span class="alert-strip-icon">⚠️</span>
-              <span id="detail-medical-risk" class="alert-strip-text">
-                <strong>Peringatan Medis:</strong> Ruptur satu kapsul saja dapat memicu intoksikasi fatal dan henti jantung dalam hitungan menit.
-              </span>
-            </div>
+                <!-- Modus Specific Parameters -->
+                <div class="modus-params-grid">
+                  <div class="param-box">
+                    <span class="param-label">Jenis Narkotika Lazim:</span>
+                    <p id="detail-drug-types" class="param-val"></p>
+                  </div>
+                  <div class="param-box">
+                    <span class="param-label">Teknik Pengemasan:</span>
+                    <p id="detail-packaging" class="param-val"></p>
+                  </div>
+                </div>
+
+                <!-- Deep Modus Detail Note -->
+                <div class="deep-modus-note">
+                  <span class="note-label">Detail Teknis Modus:</span>
+                  <p id="detail-modus-narrative" class="note-text"></p>
+                </div>
+
+                <!-- DJBC Officer Inspection Note -->
+                <div class="inspection-guideline-box">
+                  <span class="guide-title">📋 Catatan Penindakan DJBC:</span>
+                  <p id="detail-inspection-note" class="guide-text"></p>
+                </div>
+              </div>
+
+              <!-- TAB 2: FOTO GAMBAR REAL (Contoh Temuan Nyata) -->
+              <div class="tab-pane" id="tab-photos">
+                <div class="photos-tab-header">
+                  <span class="photos-tab-title">Dokumentasi Realita Barang Bukti & Citra Forensik:</span>
+                  <span class="photos-tab-hint">Klik gambar untuk melihat resolusi penuh & zoom</span>
+                </div>
+
+                <div class="findings-thumbnails-grid" id="findings-thumbnails-grid">
+                  <!-- Injected via JavaScript for lightbox & zoom -->
+                </div>
+
+                <div class="gallery-case-note">
+                  <strong>Penting:</strong> Seluruh gambar di atas merupakan dokumentasi kasus penindakan riil dan citra radiologis forensik resmi DJBC dan mitra penegak hukum internasional.
+                </div>
+              </div>
+
+              <!-- TAB 3: METODE PENGUNGKAPAN (Indikator & SOP Pemeriksaan) -->
+              <div class="tab-pane" id="tab-detection">
+                <div class="detection-two-columns">
+                  <!-- Block 1: Indikator Risiko & Ciri Perilaku -->
+                  <div class="info-block-col block-warning" id="block-indicators">
+                    <div class="block-header">
+                      <span class="block-icon warning-icon">⚠️</span>
+                      <span class="block-title">Indikator Tingkah Laku & Fisik</span>
+                    </div>
+                    <ul id="detail-indicators-list" class="block-list"></ul>
+                  </div>
+
+                  <!-- Block 2: Prosedur Pemeriksaan Standar DJBC -->
+                  <div class="info-block-col block-procedure" id="block-detection">
+                    <div class="block-header">
+                      <span class="block-icon procedure-icon">✔</span>
+                      <span class="block-title">Standar Prosedur Pemeriksaan (SOP)</span>
+                    </div>
+                    <ul id="detail-detection-list" class="block-list"></ul>
+                  </div>
+                </div>
+              </div>
+
+              <!-- TAB 4: RISIKO & BAHAYA MEDIS -->
+              <div class="tab-pane" id="tab-risk">
+                <!-- Risk Level Meter -->
+                <div class="risk-meter-widget">
+                  <div class="risk-meter-header">
+                    <span class="risk-meter-title">Tingkat Bahaya Penyelundupan:</span>
+                    <span id="risk-score-val" class="risk-meter-score">KRITIS (100/100)</span>
+                  </div>
+                  <div class="risk-meter-bar-track">
+                    <div id="risk-meter-bar-fill" class="risk-meter-bar-fill" style="width: 100%;"></div>
+                  </div>
+                  <div class="risk-meter-scale">
+                    <span>Rendah (0)</span>
+                    <span>Sedang (50)</span>
+                    <span>Tinggi (75)</span>
+                    <span>Kritis (100)</span>
+                  </div>
+                </div>
+
+                <!-- Medical Hazard Box -->
+                <div class="hazard-alert-box hazard-medical">
+                  <div class="hazard-icon">🚨</div>
+                  <div class="hazard-content">
+                    <span class="hazard-title">Bahaya Medis Darurat bagi Tersangka:</span>
+                    <p id="detail-medical-risk" class="hazard-desc"></p>
+                  </div>
+                </div>
+
+                <!-- Officer Safety & Legal Protection Box -->
+                <div class="hazard-alert-box hazard-officer">
+                  <div class="hazard-icon">🛡️</div>
+                  <div class="hazard-content">
+                    <span class="hazard-title">Protokol Keselamatan & Hukum Petugas:</span>
+                    <p class="hazard-desc">
+                      Gunakan sarung tangan nitril standar. Dilarang keras melakukan pemeriksaan fisik internal invasif rongga tubuh tanpa tenaga medis resmi. Hubungi dokter rujukan dan koordinasikan pengamanan barang bukti.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+            </div><!-- /#tab-content-container -->
 
           </div>
         </section>
@@ -507,16 +585,19 @@
       </div>
       <div class="modal-body help-content">
         <div class="help-item">
-          <strong>1. Titik Hotspot pada Tubuh:</strong> Klik nomor callout pada gambar anatomi tubuh untuk mempelajari detail tiap modus penyelundupan.
+          <strong>1. Rotasi Slider Tubuh:</strong> Gunakan slider di bagian bawah atau geser langsung tubuh untuk memutar sudut peraga 360° (Depan 0°, Kanan 90°, Belakang 180°, Kiri 270°).
         </div>
         <div class="help-item">
-          <strong>2. Galeri Contoh Temuan:</strong> Klik thumbnail foto bukti (kapsul, hasil rontgen x-ray, dan kemasan) untuk memperbesar dan melihat resolusi tinggi.
+          <strong>2. Titik Hotspot Interaktif:</strong> Klik nomor callout pada tubuh untuk membuka rincian lengkap modus operandi.
         </div>
         <div class="help-item">
-          <strong>3. Carousel di Bagian Bawah:</strong> Geser kartu modus 1 sampai 8 untuk navigasi cepat antar modus operandi.
+          <strong>3. Format Tabbed Card:</strong> Jelajahi informasi lengkap melalui 4 tab: <em>Modus Operandi</em>, <em>Foto Gambar Real</em>, <em>Pengungkapan</em>, dan <em>Risiko Bahaya</em>.
         </div>
         <div class="help-item">
-          <strong>4. Tab Langkah & Kuis:</strong> Gunakan menu nomor 1–4 di kanan atas untuk melihat indikator risiko, tindakan SOP pemeriksaan, dan mengerjakan kuis evaluasi.
+          <strong>4. Galeri Foto Barang Bukti:</strong> Klik thumbnail foto untuk membuka pratinjau resolusi tinggi dengan zoom.
+        </div>
+        <div class="help-item">
+          <strong>5. Kuis Penilaian:</strong> Kerjakan latihan soal kompetensi untuk menguji pemahaman Anda.
         </div>
       </div>
       <div class="modal-footer">
