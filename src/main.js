@@ -47,40 +47,62 @@ function initApp() {
 }
 
 // ─────────────────────────────────────────────────────────────
-// 1. 4-Angle Body Rotation Engine & Slider Controls
+// 1. 4-Angle Body Rotation Navigation Controls (Left, Reset, Right)
 // ─────────────────────────────────────────────────────────────
+const ANGLES = [0, 90, 180, 270];
+
 function setupRotationControls() {
-  const slider = document.getElementById('body-rotation-slider');
+  const btnLeft = document.getElementById('btn-rotate-left');
+  const btnReset = document.getElementById('btn-rotate-reset');
+  const btnRight = document.getElementById('btn-rotate-right');
   const canvasWrap = document.getElementById('body-canvas-wrapper');
 
-  // Slider change & input
-  slider?.addEventListener('input', (e) => {
-    const val = parseInt(e.target.value, 10);
-    applySliderAngle(val);
+  // Ke Kiri (Putar Berlawanan Jarum Jam: 0 -> 270 -> 180 -> 90 -> 0)
+  btnLeft?.addEventListener('click', () => {
+    const idx = ANGLES.indexOf(currentAngle);
+    const prevIdx = (idx - 1 + ANGLES.length) % ANGLES.length;
+    setBodyAngle(ANGLES[prevIdx]);
+  });
+
+  // Reset (Kembali ke Tampak Depan 0°)
+  btnReset?.addEventListener('click', () => {
+    setBodyAngle(0);
+  });
+
+  // Ke Kanan (Putar Searah Jarum Jam: 0 -> 90 -> 180 -> 270 -> 0)
+  btnRight?.addEventListener('click', () => {
+    const idx = ANGLES.indexOf(currentAngle);
+    const nextIdx = (idx + 1) % ANGLES.length;
+    setBodyAngle(ANGLES[nextIdx]);
   });
 
   // Interactive Drag / Touch Swipe to spin body
   let isDragging = false;
   let startX = 0;
-  let startAngle = 0;
 
   canvasWrap?.addEventListener('pointerdown', (e) => {
-    // Only drag if not clicking a hotspot pin
     if (e.target.closest('.body-hotspot-pin')) return;
     isDragging = true;
     startX = e.clientX;
-    startAngle = currentAngle;
     canvasWrap.setPointerCapture(e.pointerId);
   });
 
   canvasWrap?.addEventListener('pointermove', (e) => {
     if (!isDragging) return;
     const deltaX = e.clientX - startX;
-    // 280px drag = 360 deg
-    let newAngle = Math.round((startAngle + (deltaX / 280) * 360) % 360);
-    if (newAngle < 0) newAngle += 360;
-    if (slider) slider.value = newAngle;
-    applySliderAngle(newAngle);
+    if (Math.abs(deltaX) > 45) {
+      const idx = ANGLES.indexOf(currentAngle);
+      if (deltaX < 0) {
+        // Dragging left -> turn body clockwise
+        const nextIdx = (idx + 1) % ANGLES.length;
+        setBodyAngle(ANGLES[nextIdx]);
+      } else {
+        // Dragging right -> turn body counter-clockwise
+        const prevIdx = (idx - 1 + ANGLES.length) % ANGLES.length;
+        setBodyAngle(ANGLES[prevIdx]);
+      }
+      startX = e.clientX;
+    }
   });
 
   const endDrag = (e) => {
@@ -94,28 +116,8 @@ function setupRotationControls() {
   canvasWrap?.addEventListener('pointercancel', endDrag);
 }
 
-function applySliderAngle(val) {
-  // Determine closest discrete view angle: 0, 90, 180, 270
-  let targetAngle = 0;
-  if (val >= 45 && val < 135) {
-    targetAngle = 90;
-  } else if (val >= 135 && val < 225) {
-    targetAngle = 180;
-  } else if (val >= 225 && val < 315) {
-    targetAngle = 270;
-  } else {
-    targetAngle = 0;
-  }
-
-  setBodyAngle(targetAngle, false, val);
-}
-
-function setBodyAngle(angle, syncSlider = true, rawSliderVal = null) {
+function setBodyAngle(angle) {
   currentAngle = angle;
-  const slider = document.getElementById('body-rotation-slider');
-  if (syncSlider && slider) {
-    slider.value = angle;
-  }
 
   // Find angle info
   const angleInfo = hotspotsData.viewAngles.find(a => a.angle === angle) || hotspotsData.viewAngles[0];
@@ -124,7 +126,7 @@ function setBodyAngle(angle, syncSlider = true, rawSliderVal = null) {
   const degText = document.getElementById('angle-deg-text');
   const nameText = document.getElementById('angle-name-text');
   const subText = document.getElementById('angle-sub-text');
-  if (degText) degText.textContent = `${rawSliderVal !== null ? rawSliderVal : angle}°`;
+  if (degText) degText.textContent = `${angle}°`;
   if (nameText) nameText.textContent = angleInfo.label;
   if (subText) subText.textContent = `(${angleInfo.sub})`;
 

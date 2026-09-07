@@ -181,22 +181,22 @@
               </div>
             </div>
 
-            <!-- ─── SLIDER ROTATION CONTROL BAR ─── -->
-            <div class="rotation-slider-dock">
-              <div class="slider-row">
-                <span class="slider-label-left">0° Depan</span>
-                <div class="slider-track-wrap">
-                  <input type="range" id="body-rotation-slider" min="0" max="360" step="1" value="0" aria-label="Rotasi Tubuh Manusia 360 Derajat" />
-                  <div class="slider-ticks">
-                    <span class="tick" style="left: 0%;">0° Depan</span>
-                    <span class="tick" style="left: 25%;">90° Kanan</span>
-                    <span class="tick" style="left: 50%;">180° Belakang</span>
-                    <span class="tick" style="left: 75%;">270° Kiri</span>
-                    <span class="tick" style="left: 100%;">360°</span>
-                  </div>
-                </div>
-                <span class="slider-label-right">360°</span>
-              </div>
+            <!-- ─── ROTATION NAVIGATION CONTROLS (KE KIRI, RESET, KE KANAN) ─── -->
+            <div class="rotation-nav-dock">
+              <button id="btn-rotate-left" class="rotate-nav-btn btn-left" title="Putar 90° ke Kiri" aria-label="Putar Kiri">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                <span>Ke Kiri</span>
+              </button>
+
+              <button id="btn-rotate-reset" class="rotate-nav-btn btn-reset" title="Kembalikan ke Tampak Depan (0°)" aria-label="Reset Depan">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><polyline points="3 3 3 8 8 8"></polyline></svg>
+                <span>Reset (Depan)</span>
+              </button>
+
+              <button id="btn-rotate-right" class="rotate-nav-btn btn-right" title="Putar 90° ke Kanan" aria-label="Putar Kanan">
+                <span>Ke Kanan</span>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+              </button>
             </div>
 
           </div><!-- /#rotatable-body-view -->
@@ -426,7 +426,7 @@
       </div>
       <div class="modal-body help-content">
         <div class="help-item">
-          <strong>1. Rotasi Slider Tubuh:</strong> Gunakan slider di bawah atau geser langsung tubuh untuk memutar peraga anatomi 360° (Depan 0°, Kanan 90°, Belakang 180°, Kiri 270°).
+          <strong>1. Rotasi Navigasi Tubuh:</strong> Gunakan tombol kontrol <strong>Ke Kiri</strong>, <strong>Reset (Depan)</strong>, dan <strong>Ke Kanan</strong> di bawah model, atau usap/drag langsung pada model untuk memutar sudut peraga anatomi 360° (Depan 0°, Kanan 90°, Belakang 180°, Kiri 270°).
         </div>
         <div class="help-item">
           <strong>2. Titik Hotspot Interaktif:</strong> Klik nomor callout pada tubuh untuk membuka kartu detail modus operandi.
