@@ -1,0 +1,23 @@
+{
+  "name": "interactive-narcotics-djbc",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Modul Pembelajaran Interaktif Deteksi Penyembunyian Narkotika - DJBC",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "build:model": "node scripts/generate-male-model.js",
+    "image-to-3d": "python scripts/image_to_3d.py",
+    "preview": "vite preview",
+    "package-scorm": "npm run build:model && npm run build && node scripts/pack-scorm.js"
+  },
+  "dependencies": {
+    "gsap": "^3.12.5",
+    "glightbox": "^3.3.0",
+    "three": "^0.167.0"
+  },
+  "devDependencies": {
+    "vite": "^5.3.4",
+    "archiver": "^7.0.1"
+  }
+}

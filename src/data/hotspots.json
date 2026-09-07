@@ -1,0 +1,321 @@
+{
+  "categories": [
+    { "id": "ingestion",    "label": "Metode Telan (Ingestion)",      "icon": "💊", "color": "#ff4444", "hotspots": ["oral-cavity","stomach"] },
+    { "id": "insertion",    "label": "Metode Insertion",              "icon": "🔴", "color": "#ff6600", "hotspots": ["anus"] },
+    { "id": "body-strapping","label": "Body Strapping",               "icon": "🩹", "color": "#ffaa00", "hotspots": ["thigh","calf","abdomen-strap"] },
+    { "id": "body-adjacent","label": "Body-Adjacent Concealment",     "icon": "👙", "color": "#8844ff", "hotspots": ["sanitary-pad","prosthetic-device"] },
+    { "id": "modern",       "label": "Modus Terkini",                 "icon": "🧪", "color": "#00ccff", "hotspots": ["fabric-impregn"] }
+  ],
+  "hotspots": [
+    {
+      "id": "oral-cavity",
+      "label": "Rongga Mulut",
+      "categoryId": "ingestion",
+      "position3D": { "x": 0.0, "y": 1.66, "z": 0.088 },
+      "cameraAngle": "front-head",
+      "riskLevel": "high",
+      "riskScore": 65,
+      "methods": [
+        "Paket kecil narkotika disembunyikan di bawah lidah atau di celah gigi geraham",
+        "Ditelan mendadak saat akan ditangkap — bungkusan seadanya (body stuffing akut)",
+        "Permen, kapsul, atau pil narkotika disamarkan sebagai obat resmi"
+      ],
+      "indicators": [
+        "Subjek menolak membuka mulut atau terus menutup mulut rapat",
+        "Gerakan menelan berulang tanpa sebab saat diinterogasi",
+        "Air liur berlebihan atau kesulitan berbicara jelas"
+      ],
+      "detection": [
+        "Pemeriksaan visual rongga mulut menggunakan senter",
+        "Gunakan tongue depressor — minta subjek membuka mulut lebar dan mengangkat lidah",
+        "Perhatikan gerakan menelan mendadak saat pertanyaan diajukan",
+        "Trace detection swab pada permukaan bibir dan tangan subjek"
+      ],
+      "medicalRisk": "Risiko asfiksia dan tersedak — perlu penanganan darurat medis segera",
+      "inspectionNote": "Dapat dilakukan petugas terlatih. Gunakan penlight dan tongue depressor steril. Jika subjek menelan di depan petugas, segera dokumentasikan dan hubungi medis.",
+      "images": [
+        { "src": "assets/hotspot-images/oral-cavity/placeholder_1.svg", "caption": "Ilustrasi modus penyembunyian di rongga mulut", "type": "illustration" },
+        { "src": "assets/hotspot-images/oral-cavity/placeholder_2.svg", "caption": "Teknik pemeriksaan dengan tongue depressor", "type": "procedure" }
+      ]
+    },
+    {
+      "id": "stomach",
+      "label": "Lambung & Saluran GI",
+      "categoryId": "ingestion",
+      "position3D": { "x": 0.0, "y": 1.18, "z": 0.098 },
+      "cameraAngle": "front-torso",
+      "riskLevel": "critical",
+      "riskScore": 100,
+      "methods": [
+        "Body Packing: 50–200 pellet kokain atau heroin dibungkus ketat dalam kondom latex berlapis",
+        "Setiap paket berbobot 8–10 gram — total bisa mencapai 1–2 kg narkotika",
+        "Ditelan 12–48 jam sebelum keberangkatan dengan bantuan obat antimotilitas",
+        "Tujuan: melewati border internasional tanpa terdeteksi alat konvensional"
+      ],
+      "indicators": [
+        "Perut tampak membesar tidak proporsional dibandingkan postur tubuh",
+        "Menolak makan atau minum sepanjang perjalanan",
+        "Keringat dingin, pucat, dan gelisah — tanda awal paket hampir ruptur",
+        "Riwayat perjalanan tidak konsisten dengan kondisi fisik"
+      ],
+      "detection": [
+        "X-Ray abdomen: tampak pola 'rosette sign' — bayangan radio-opaque berbentuk roset",
+        "CT-Scan: gold standard — menghitung jumlah dan posisi tepat setiap paket",
+        "Jangan berikan pencahar atau obat pelancar BAB — risiko ruptur massal",
+        "Transit monitoring di fasilitas medis hingga seluruh paket keluar alami"
+      ],
+      "medicalRisk": "KRITIS: Ruptur satu paket menyebabkan overdosis masif — kematian dalam menit. Paket tidak boleh dikeluarkan secara paksa.",
+      "inspectionNote": "WAJIB rujuk ke fasilitas medis. X-Ray atau CT-Scan harus dilakukan sebelum keputusan apapun. JANGAN berikan pencahar, stimulan, atau obat apapun tanpa konsultasi dokter.",
+      "images": [
+        { "src": "anatomy/intestine/organ.webp",                           "caption": "Anatomi Saluran Gastrointestinal (Lambung, Duodenum, Kolon) — Saluran Transit Pellet", "type": "illustration" },
+        { "src": "anatomy/intestine/location.webp",                        "caption": "Posisi Relatif Saluran Pencernaan dalam Rongga Perut Manusia", "type": "illustration" },
+        { "src": "assets/hotspot-images/stomach/placeholder_xray.svg",     "caption": "X-Ray abdomen: tampak pola rosette sign dari paket narkotika", "type": "x-ray" },
+        { "src": "assets/hotspot-images/stomach/placeholder_ct.svg",        "caption": "CT-Scan cross-section: paket latex terlihat dalam saluran GI", "type": "ct-scan" },
+        { "src": "assets/hotspot-images/stomach/placeholder_diagram.svg",   "caption": "Ilustrasi skematik modus body packing dan jalur transit paket", "type": "illustration" },
+        { "src": "assets/hotspot-images/stomach/placeholder_pellet.svg",    "caption": "Contoh pellet body packing yang berhasil disita (sudah diproses)", "type": "evidence" }
+      ]
+    },
+    {
+      "id": "anus",
+      "label": "Anus / Rektum",
+      "categoryId": "insertion",
+      "position3D": { "x": 0.02, "y": 0.80, "z": -0.065 },
+      "cameraAngle": "back-pelvis",
+      "riskLevel": "high",
+      "riskScore": 70,
+      "methods": [
+        "1–5 paket narkotika dimasukkan ke dalam rektum secara manual",
+        "Ukuran paket lebih besar dari body packing oral — bungkus sering tidak rapi",
+        "Metode mendadak saat hendak ditangkap — risiko ruptur sangat tinggi",
+        "Kadang menggunakan pelumas untuk memudahkan penyimpanan"
+      ],
+      "indicators": [
+        "Berjalan dengan kaki renggang atau postur tidak natural",
+        "Menghindari duduk atau duduk miring ke satu sisi",
+        "Penolakan keras dan berlebihan terhadap pemeriksaan area tersebut",
+        "Ekspresi kesakitan saat bergerak atau duduk"
+      ],
+      "detection": [
+        "Inspeksi visual postur berjalan dan duduk dari kejauhan",
+        "X-Ray pelvis atau abdomen bawah: tampak benda asing di rektum",
+        "Pemeriksaan fisik oleh tenaga medis terlatih dengan protokol resmi",
+        "Dokumentasi wajib dengan saksi sebelum pemeriksaan dilakukan"
+      ],
+      "medicalRisk": "Risiko ruptur tinggi akibat pengemasan seadanya. Infeksi serius dan perdarahan internal dapat mengancam jiwa.",
+      "inspectionNote": "Pemeriksaan fisik HANYA dilakukan oleh tenaga medis berwenang. Wajib ada saksi dan dokumentasi tertulis. Koordinasikan dengan Klinik Kesehatan DJBC atau fasilitas medis terdekat.",
+      "images": [
+        { "src": "anatomy/intestine/compare.webp",                         "caption": "Anatomi Rektum dan Kolon Sigmoid — Area Penyisipan Paket Narkotika", "type": "illustration" },
+        { "src": "assets/hotspot-images/anus/placeholder_xray.svg",        "caption": "X-Ray pelvis: tampak benda asing di daerah rektum", "type": "x-ray" },
+        { "src": "assets/hotspot-images/anus/placeholder_diagram.svg",     "caption": "Ilustrasi modus insertion melalui anus", "type": "illustration" }
+      ]
+    },
+    {
+      "id": "thigh",
+      "label": "Paha (Body Strapping)",
+      "categoryId": "body-strapping",
+      "position3D": { "x": 0.13, "y": 0.52, "z": 0.052 },
+      "cameraAngle": "front-lower",
+      "riskLevel": "medium",
+      "riskScore": 40,
+      "methods": [
+        "Lempengan narkotika pipih dililit di sekeliling paha dengan lakban coklat atau tape medis",
+        "Dibungkus kain atau perban lebih dulu agar tidak mudah terdeteksi saat pat-down",
+        "Posisi: bagian dalam paha atau belakang paha — area paling jarang diperiksa",
+        "Target narkotika: sabu crystal slab, hashish pipih, atau heroin padat"
+      ],
+      "indicators": [
+        "Pakaian terlihat ketat tidak proporsional hanya di area paha",
+        "Gerakan melangkah kaku dan tidak natural — menghindari ayunan kaki normal",
+        "Menolak melakukan squat atau jongkok saat diminta",
+        "Berkeringat berlebihan di area bawah pinggang"
+      ],
+      "detection": [
+        "Pat-down search: tekan permukaan paha dari lutut ke selangkangan secara sistematis",
+        "Perhatikan tonjolan keras tidak wajar di bawah pakaian",
+        "Minta subjek melakukan squat — gerakan terbatas mengindikasikan strapping",
+        "Full body scanner: tampak anomali densitas di area paha"
+      ],
+      "medicalRisk": "Rendah. Risiko utama: gangguan sirkulasi darah pada tungkai akibat lilitan terlalu kencang.",
+      "inspectionNote": "Pat-down WAJIB dilakukan oleh petugas dengan gender yang sama. Prosedur standar Bea Cukai. Minta subjek berdiri tegak dan angkat kedua tangan.",
+      "images": [
+        { "src": "assets/hotspot-images/thigh/placeholder_strapping.svg",  "caption": "Ilustrasi teknik body strapping di area paha menggunakan tape", "type": "illustration" },
+        { "src": "assets/hotspot-images/thigh/placeholder_scanner.svg",    "caption": "Hasil full body scanner — anomali densitas di area paha", "type": "scanner" }
+      ]
+    },
+    {
+      "id": "calf",
+      "label": "Betis (Body Strapping)",
+      "categoryId": "body-strapping",
+      "position3D": { "x": 0.15, "y": 0.30, "z": -0.120 },
+      "cameraAngle": "front-lower",
+      "riskLevel": "medium",
+      "riskScore": 35,
+      "methods": [
+        "Narkotika dililit di sekitar betis — area yang secara psikologis jarang dicurigai",
+        "Dikombinasikan dengan kaos kaki tebal atau celana panjang longgar",
+        "Posisi: melingkar di betis atas atau bawah, dibungkus perban elastis",
+        "Target: narkotika padat tipis — hashish slab, tembakau sintetis"
+      ],
+      "indicators": [
+        "Memakai celana panjang tebal atau berlapis dalam kondisi cuaca panas",
+        "Kaos kaki tebal tidak sesuai konteks perjalanan",
+        "Gerakan kaki kaku atau menarik kaki saat diperiksa"
+      ],
+      "detection": [
+        "Pat-down dari pergelangan kaki ke lutut — remas betis secara sistematis",
+        "Minta subjek menggulung celana untuk inspeksi visual langsung",
+        "Thermal imaging: strapping tape menghambat pancaran panas kulit",
+        "Deteksi kekerasan tidak normal saat diremas dibandingkan betis sisi lain"
+      ],
+      "medicalRisk": "Rendah. Gangguan sirkulasi lokal jika lilitan terlalu kencang.",
+      "inspectionNote": "Periksa area betis bersamaan dengan paha dalam satu prosedur pat-down yang berkesinambungan.",
+      "images": [
+        { "src": "assets/hotspot-images/calf/placeholder_diagram.svg",     "caption": "Ilustrasi posisi lilitan narkotika di area betis", "type": "illustration" },
+        { "src": "assets/hotspot-images/calf/placeholder_thermal.svg",     "caption": "Thermal imaging: perbedaan suhu akibat strapping tape", "type": "thermal" }
+      ]
+    },
+    {
+      "id": "abdomen-strap",
+      "label": "Perut (Body Strapping)",
+      "categoryId": "body-strapping",
+      "position3D": { "x": 0.0, "y": 1.03, "z": 0.100 },
+      "cameraAngle": "front-torso",
+      "riskLevel": "medium",
+      "riskScore": 50,
+      "methods": [
+        "Lempengan narkotika besar dililit melingkar di perut menggunakan elastic bandage plus lakban",
+        "Dikamuflase dengan korset, girdle, atau pakaian kompresi atletik",
+        "Posisi: melingkar dari bawah dada hingga pinggang — kapasitas besar (1–2 kg)",
+        "Sering digunakan pada penumpang bertubuh gemuk untuk kamuflase yang lebih efektif"
+      ],
+      "indicators": [
+        "Perut tampak lebih besar atau kaku tidak proporsional dengan postur keseluruhan",
+        "Tidak mau membungkuk — menghindari perubahan bentuk area perut",
+        "Berkeringat berlebihan di area torso meski berada di ruangan ber-AC",
+        "Suara 'crinkle' plastik saat bergerak atau bernapas dalam",
+        "Pakaian berlapis tidak wajar (baju + korset + jaket di cuaca panas)"
+      ],
+      "detection": [
+        "Pat-down area torso: tekan merata dari rusuk bawah hingga pinggul",
+        "Perhatikan suara plastik saat ditekan atau saat subjek bergerak",
+        "Minta subjek mengangkat baju bagian atas untuk inspeksi visual",
+        "Full body scanner: lapisan narkotika tampak sebagai anomali melingkar",
+        "Minta subjek membungkuk ke depan — gerakan kaku mengindikasikan strapping"
+      ],
+      "medicalRisk": "Rendah. Lilitan terlalu kencang dapat menyebabkan gangguan pernapasan dan tekanan darah.",
+      "inspectionNote": "Area perut adalah area PRIORITAS dalam prosedur pat-down. Wajib diperiksa pada setiap pemeriksaan sekunder. Arahkan tangan sepanjang pinggang dari belakang ke depan.",
+      "images": [
+        { "src": "assets/hotspot-images/abdomen-strap/placeholder_strapping.svg", "caption": "Ilustrasi narkotika dililit di perut menggunakan elastic bandage", "type": "illustration" },
+        { "src": "assets/hotspot-images/abdomen-strap/placeholder_scanner.svg",   "caption": "Full body scanner: pola melingkar anomali di area perut", "type": "scanner" },
+        { "src": "assets/hotspot-images/abdomen-strap/placeholder_evidence.svg",  "caption": "Barang bukti hasil penyitaan: strapping narkotika dari perut", "type": "evidence" }
+      ]
+    },
+    {
+      "id": "sanitary-pad",
+      "label": "Pembalut Wanita",
+      "categoryId": "body-adjacent",
+      "position3D": { "x": 0.03, "y": 0.84, "z": 0.051 },
+      "cameraAngle": "front-pelvis",
+      "riskLevel": "medium",
+      "riskScore": 40,
+      "methods": [
+        "Narkotika bubuk (sabu, heroin) dikemas dalam lapisan daya serap pembalut yang dimodifikasi",
+        "Lapisan pembalut asli dipasang di luar untuk tampilan normal",
+        "Dimanfaatkan karena sensitivitas gender yang menyebabkan area ini jarang diperiksa",
+        "Juga digunakan pada kancing pakaian dalam yang dimodifikasi"
+      ],
+      "indicators": [
+        "Berjalan dengan gaya tidak nyaman atau canggung di area panggul",
+        "Tas berisi pembalut dalam jumlah sangat banyak melebihi kebutuhan wajar",
+        "Reaksi panik atau agresif berlebihan saat pemeriksaan area tersebut disinggung",
+        "Pembalut dengan ukuran tidak konsisten atau tampak tidak wajar"
+      ],
+      "detection": [
+        "HANYA dapat dilakukan oleh petugas perempuan yang terlatih — TIDAK BOLEH dilanggar",
+        "Full body scanner: anomali densitas di area panggul",
+        "K-9 Unit: anjing detektor narkotika dapat mencium meski dibungkus pembalut",
+        "Trace detection swab pada tangan dan kantong penyimpanan pembalut",
+        "Jika diperlukan pemeriksaan fisik: wajib ada saksi perempuan dan dokumentasi"
+      ],
+      "medicalRisk": "Sangat rendah (eksternal). Tidak ada risiko medis langsung ke tubuh.",
+      "inspectionNote": "⚠️ WAJIB: Pemeriksaan HANYA oleh petugas perempuan. Hormati privasi dan martabat subjek. Prosedur harus sesuai Peraturan Dirjen dan SOP DJBC tentang pemeriksaan gender sensitif.",
+      "images": [
+        { "src": "assets/hotspot-images/sanitary-pad/placeholder_diagram.svg",  "caption": "Ilustrasi modifikasi pembalut sebagai tempat penyembunyian narkotika", "type": "illustration" },
+        { "src": "assets/hotspot-images/sanitary-pad/placeholder_scanner.svg",  "caption": "Hasil scanner: anomali densitas di area panggul", "type": "scanner" }
+      ]
+    },
+    {
+      "id": "prosthetic-device",
+      "label": "Prostetik / Gips Palsu",
+      "categoryId": "body-adjacent",
+      "position3D": { "x": 0.14, "y": 0.40, "z": 0.015 },
+      "cameraAngle": "front-lower",
+      "riskLevel": "medium",
+      "riskScore": 40,
+      "methods": [
+        "Anggota tubuh prostetik (kaki atau lengan palsu) dibuat berongga untuk menyimpan narkotika",
+        "Gips medis palsu dipasang seolah ada patah tulang — isi dalam berisi narkotika padat",
+        "Brace ortopedi atau korset dimodifikasi dengan kompartemen tersembunyi",
+        "Kancing pakaian atau aksesori medis logam digunakan sebagai kamuflase tambahan"
+      ],
+      "indicators": [
+        "Gips atau prostetik tampak baru tapi tidak ada dokumen medis pendukung yang valid",
+        "Prostetik terasa lebih berat dari normal saat dijinjing atau diangkat",
+        "Penolakan keras terhadap pemeriksaan X-Ray dengan alasan 'takut radiasi'",
+        "Kondisi fisik nyata tidak konsisten dengan jenis cedera atau alat yang diklaim"
+      ],
+      "detection": [
+        "X-Ray pada seluruh prostetik atau gips: tampak rongga atau kepadatan tidak normal",
+        "Verifikasi silang dokumen medis dengan kondisi fisik aktual subjek",
+        "Ketuk prostetik — suara berongga tidak normal mengindikasikan modifikasi",
+        "K-9 Unit: anjing detektor mampu mencium narkotika meski dalam gips",
+        "Koordinasikan dengan dokter atau paramedis untuk menilai keaslian alat medis"
+      ],
+      "medicalRisk": "Sangat rendah (sepenuhnya eksternal). Tidak ada risiko medis ke tubuh subjek.",
+      "inspectionNote": "Koordinasikan dengan Klinik Kesehatan DJBC atau dokter mitra untuk membedakan alat kesehatan asli vs modifikasi. Dokumen medis harus diverifikasi ke rumah sakit penerbit.",
+      "images": [
+        { "src": "assets/hotspot-images/prosthetic-device/placeholder_xray.svg",      "caption": "X-Ray: rongga dalam prostetik yang berisi narkotika", "type": "x-ray" },
+        { "src": "assets/hotspot-images/prosthetic-device/placeholder_gips.svg",      "caption": "Gips palsu yang dibongkar — tampak kompartemen narkotika di dalam", "type": "evidence" },
+        { "src": "assets/hotspot-images/prosthetic-device/placeholder_diagram.svg",   "caption": "Diagram konstruksi prostetik yang dimodifikasi", "type": "illustration" }
+      ]
+    },
+    {
+      "id": "fabric-impregn",
+      "label": "Narkotika Diresapkan ke Kain",
+      "categoryId": "modern",
+      "position3D": { "x": 0.01, "y": 1.33, "z": 0.115 },
+      "cameraAngle": "front-torso",
+      "riskLevel": "high",
+      "riskScore": 75,
+      "methods": [
+        "Narkotika cair (fentanyl, methamphetamine cair) diresapkan ke serat kain pakaian",
+        "Pakaian direndam dalam larutan narkotika lalu dikeringkan — tampak bersih dan normal",
+        "Di tujuan: kain dilarutkan atau direbus untuk mengekstrak kembali narkotika",
+        "Tidak terdeteksi secara visual karena pakaian tampak sempurna normal",
+        "Modus paling sulit dideteksi tanpa alat kimia khusus"
+      ],
+      "indicators": [
+        "Pakaian terasa kaku atau lebih berat dari material normalnya",
+        "Bau kimia samar — solvent, asam, atau bau artifisial yang tidak biasa",
+        "Jumlah pakaian sangat melebihi kebutuhan wajar perjalanan",
+        "Pakaian dengan material sintetis khusus dalam jumlah besar yang mencurigakan"
+      ],
+      "detection": [
+        "Ion Mobility Spectrometry (IMS): swab permukaan kain — mendeteksi residu kimia",
+        "Near-Infrared Spectroscopy (NIR): mendeteksi komposisi kimia tidak biasa di serat kain",
+        "K-9 Unit terlatih khusus narkotika tersembunyi — paling efektif untuk modus ini",
+        "Trace detection swab pada permukaan kain — terutama area lipatan dan jahitan",
+        "Perhatikan dan catat bau kimia tidak biasa dari koper atau bagasi"
+      ],
+      "medicalRisk": "TINGGI jika terjadi kontak kulit langsung dengan kain mengandung fentanyl. Absorpsi transdermal dapat menyebabkan overdosis. Bahaya juga bagi petugas pemeriksa.",
+      "inspectionNote": "⚠️ WAJIB gunakan sarung tangan nitril sebelum menyentuh pakaian yang dicurigai. JANGAN kontak kulit langsung. Jika terpapar: cuci segera dengan air sabun dan lapor ke medis.",
+      "images": [
+        { "src": "anatomy/skin/organ.webp",                                        "caption": "Struktur Lapisan Kulit Manusia (Epidermis, Dermis, Hipodermis) — Hambatan Transdermal", "type": "illustration" },
+        { "src": "anatomy/skin/microscopic.webp",                                  "caption": "Potongan Mikroskopis Poripori & Folikel Rambut Jalur Peresapan Cairan Kimia", "type": "illustration" },
+        { "src": "assets/hotspot-images/fabric-impregn/placeholder_ims.svg",       "caption": "Ion Mobility Spectrometry (IMS): deteksi residu narkotika pada kain", "type": "equipment" },
+        { "src": "assets/hotspot-images/fabric-impregn/placeholder_fabric.svg",    "caption": "Kain yang diresapi narkotika — tampak normal secara visual", "type": "evidence" },
+        { "src": "assets/hotspot-images/fabric-impregn/placeholder_diagram.svg",   "caption": "Proses peresapan dan ekstraksi narkotika dari serat kain", "type": "illustration" }
+      ]
+    }
+  ]
+}

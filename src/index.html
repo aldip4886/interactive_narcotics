@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Deteksi Penyembunyian Narkotika — Modul Pelatihan DJBC</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles/main.css" />
+  <link rel="stylesheet" href="styles/hotspot-card.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" />
+</head>
+<body>
+  <!-- ══════════════════════════════════ HEADER ══════════════════════════════════ -->
+  <header id="app-header">
+    <div class="header-left">
+      <div class="kemenkeu-logo-group">
+        <svg class="kemenkeu-emblem" viewBox="0 0 64 64" width="38" height="38" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Stylized Ministry of Finance shield & star emblem -->
+          <circle cx="32" cy="32" r="30" fill="#0B2C6E"/>
+          <path d="M32 8L44 24H20L32 8Z" fill="#F5A623"/>
+          <path d="M32 54L18 36H46L32 54Z" fill="#F5A623"/>
+          <circle cx="32" cy="30" r="10" fill="#FFFFFF"/>
+          <path d="M32 23L34 28H39L35 31L36.5 36L32 33L27.5 36L29 31L25 28H30L32 23Z" fill="#0B2C6E"/>
+        </svg>
+        <div class="header-brand-text">
+          <span class="brand-top">KEMENTERIAN KEUANGAN</span>
+          <span class="brand-sub">DIREKTORAT JENDERAL BEA DAN CUKAI</span>
+        </div>
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="slogan-box">
+        <span class="slogan-text">Bea Cukai Makin Baik</span>
+        <div class="slogan-bar"><span class="bar-yellow"></span><span class="bar-blue"></span></div>
+      </div>
+      <div class="header-divider"></div>
+      <div class="values-box">
+        <span>MENGAWASI</span>
+        <span>MELINDUNGI</span>
+        <span>MELAYANI</span>
+      </div>
+      <div id="progress-global">
+        <span id="progress-text">0 / 9 Titik</span>
+        <div class="progress-bar-track"><div id="progress-bar-fill"></div></div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ══════════════════════════════════ MAIN 2-COLUMN LAYOUT ══════════════════════════════════ -->
+  <div id="app-layout">
+
+    <!-- ─── COLUMN 1 (MAIN): 3D Viewer & Rotating Pedestal ─── -->
+    <main id="viewer-container">
+      <!-- Floating Title Badge on Viewer Top-Left -->
+      <div class="viewer-title-badge">
+        <span class="viewer-badge-tag">DIREKTORAT JENDERAL BEA DAN CUKAI</span>
+        <h1 class="viewer-title-text">
+          Modus Penyelundupan Narkotika<br>
+          <span class="highlight-gold">pada Badan Kurir</span>
+        </h1>
+        <p class="viewer-title-sub">Klik titik hotspot interaktif untuk memeriksa indikasi fisik, metode deteksi, dan risiko.</p>
+      </div>
+
+      <!-- Loading Screen -->
+      <div id="loading-screen">
+        <div class="loading-inner">
+          <div class="loading-logo-clean">
+            <span class="kemenkeu-badge">DJBC</span>
+          </div>
+          <div class="loading-title">Memuat Modul Interaktif 3D...</div>
+          <div class="loading-bar-track"><div id="loading-bar"></div></div>
+          <div class="loading-hint">Model anatomi tubuh manusia sedang disiapkan</div>
+        </div>
+      </div>
+
+      <!-- Three.js Canvas -->
+      <canvas id="three-canvas"></canvas>
+
+      <!-- Rotation Hint Overlay -->
+      <div class="pedestal-rotate-hint">
+        <div class="rotate-arrow-curved">⟲ 360° ⟳</div>
+        <span>Seret untuk memutar model</span>
+      </div>
+
+      <!-- Bottom Pedestal Nav Carousel Controls -->
+      <div class="carousel-nav-controls">
+        <button class="carousel-btn" id="btn-carousel-prev" title="Sudut Sebelumnya">‹</button>
+        <button class="carousel-btn play-btn" id="btn-carousel-play" title="Putar Otomatis">▶</button>
+        <button class="carousel-btn" id="btn-carousel-next" title="Sudut Berikutnya">›</button>
+      </div>
+
+      <!-- X-Ray & Organ Quick Toggles -->
+      <div class="quick-view-tools">
+        <button class="tool-pill" id="btn-xray">
+          <span class="tool-icon">☢</span>
+          <span id="xray-label">Mode X-Ray</span>
+        </button>
+        <button class="tool-pill" id="btn-toggle-organs">
+          <span class="tool-icon">🫁</span>
+          <span id="organs-label">Organ Anatomi: ON</span>
+        </button>
+      </div>
+
+      <!-- Intro Overlay -->
+      <div id="intro-overlay">
+        <div class="intro-card">
+          <div class="intro-badge">DJBC TRAINING MODULE</div>
+          <h1>Modus Penyelundupan Narkotika<br>melalui Badan Kurir</h1>
+          <p>Modul pelatihan interaktif visual untuk mengenali titik rawan penyembunyian narkotika, teknik pengungkapan, indikasi fisik, dan standar operasional pemeriksaan Bea dan Cukai.</p>
+          <ul class="intro-features">
+            <li>⚪ Model 3D tubuh manusia realistis dengan rotasi 360°</li>
+            <li>☢ Efek X-Ray dan visualisasi organ anatomi internal</li>
+            <li>📍 9 Titik hotspot interaktif dengan dokumentasi lengkap</li>
+            <li>📝 Kuis penilaian kompetensi petugas</li>
+          </ul>
+          <button id="btn-start" class="btn-primary">Mulai Eksplorasi Model →</button>
+        </div>
+      </div>
+    </main>
+
+    <!-- ─── COLUMN 3 (RIGHT): Interactive Cards & Bottom Views ─── -->
+    <aside id="right-panel">
+      <div class="right-header-note">
+        Pilih titik pada model atau menu di samping untuk melihat informasi detail:
+      </div>
+
+      <!-- Mode Cards List -->
+      <div class="detail-cards-list" id="detail-cards-list">
+        <!-- Ingestion Card -->
+        <div class="overview-card" data-cat-id="ingestion" data-hs-id="oral-cavity">
+          <div class="card-thumb-wrap">
+            <img src="anatomy/lungs/location.webp" alt="Ingestion" class="card-thumb" />
+          </div>
+          <div class="card-meta">
+            <div class="card-badge-row">
+              <span class="dot-badge badge-gold"></span>
+              <span class="card-name">Ingestion</span>
+            </div>
+            <span class="card-desc">Metode telan</span>
+          </div>
+          <span class="card-chevron">›</span>
+        </div>
+
+        <!-- Insertion Card -->
+        <div class="overview-card" data-cat-id="insertion" data-hs-id="anus">
+          <div class="card-thumb-wrap">
+            <img src="anatomy/intestine/compare.webp" alt="Insertion" class="card-thumb" />
+          </div>
+          <div class="card-meta">
+            <div class="card-badge-row">
+              <span class="dot-badge badge-red"></span>
+              <span class="card-name">Insertion</span>
+            </div>
+            <span class="card-desc">Melalui alat kelamin (anal)</span>
+          </div>
+          <span class="card-chevron">›</span>
+        </div>
+
+        <!-- Body Strapping Card -->
+        <div class="overview-card" data-cat-id="body-strapping" data-hs-id="abdomen-strap">
+          <div class="card-thumb-wrap">
+            <img src="assets/hotspot-images/abdomen-strap/placeholder_strapping.svg" alt="Body Strapping" class="card-thumb" />
+          </div>
+          <div class="card-meta">
+            <div class="card-badge-row">
+              <span class="dot-badge badge-green"></span>
+              <span class="card-name">Body Strapping</span>
+            </div>
+            <span class="card-desc">Dililit / dibalut pada paha, betis, perut</span>
+          </div>
+          <span class="card-chevron">›</span>
+        </div>
+
+        <!-- Body-adjacent Card -->
+        <div class="overview-card" data-cat-id="body-adjacent" data-hs-id="sanitary-pad">
+          <div class="card-thumb-wrap">
+            <img src="anatomy/skin/location.webp" alt="Body-adjacent" class="card-thumb" />
+          </div>
+          <div class="card-meta">
+            <div class="card-badge-row">
+              <span class="dot-badge badge-blue"></span>
+              <span class="card-name">Body-adjacent Concealment</span>
+            </div>
+            <span class="card-desc">Pembalut wanita, kancing pakaian</span>
+          </div>
+          <span class="card-chevron">›</span>
+        </div>
+
+        <!-- Modus Terkini Card -->
+        <div class="overview-card" data-cat-id="modern" data-hs-id="fabric-impregn">
+          <div class="card-thumb-wrap">
+            <img src="anatomy/skin/thumb.webp" alt="Modus Terkini" class="card-thumb" />
+          </div>
+          <div class="card-meta">
+            <div class="card-badge-row">
+              <span class="dot-badge badge-purple"></span>
+              <span class="card-name">Modus Terkini</span>
+            </div>
+            <span class="card-desc">Diresapkan ke dalam serat kain</span>
+          </div>
+          <span class="card-chevron">›</span>
+        </div>
+      </div>
+
+      <!-- Right Footer: Feature Badges & View Switches -->
+      <div class="right-footer-section">
+        <div class="footer-feature-badges">
+          <div class="feature-item">
+            <span class="feat-icon">🛡</span>
+            <span class="feat-label">Pemeriksaan Lebih Teliti</span>
+          </div>
+          <div class="feature-item">
+            <span class="feat-icon">👥</span>
+            <span class="feat-label">Cegah Peredaran Narkotika</span>
+          </div>
+          <div class="feature-item">
+            <span class="feat-icon">🌱</span>
+            <span class="feat-label">Wujudkan Indonesia Sehat</span>
+          </div>
+        </div>
+
+        <!-- Camera Angle Switcher Pills -->
+        <div class="view-angle-pills">
+          <button class="angle-pill active" id="btn-view-front">Tampak Depan</button>
+          <button class="angle-pill" id="btn-view-side">Tampak Samping</button>
+          <button class="angle-pill" id="btn-view-back">Tampak Belakang</button>
+        </div>
+      </div>
+    </aside>
+
+  </div><!-- /#app-layout -->
+
+  <!-- ══════════════════════════════════ HOTSPOT CARD MODAL & CONNECTOR ══════════════════════════════════ -->
+  <div id="hotspot-card-overlay" class="hidden" role="dialog" aria-modal="true">
+    <!-- SVG Connector line linking 3D hotspot to the card (Enhanced Straight Line with Wipe) -->
+    <svg id="connector-svg" class="connector-svg">
+      <defs>
+        <filter id="gold-glow" x="-30%" y="-30%" width="160%" height="160%">
+          <feGaussianBlur stdDeviation="2.5" result="blur" />
+          <feMerge>
+            <feMergeNode in="blur" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
+      </defs>
+      <!-- Soft translucent glow halo line underneath -->
+      <line id="connector-line-glow" x1="0" y1="0" x2="0" y2="0" stroke="#f5a623" stroke-width="7" stroke-opacity="0.28" stroke-linecap="round" />
+      <!-- Sharp core straight line -->
+      <line id="connector-line" x1="0" y1="0" x2="0" y2="0" stroke="#f5a623" stroke-width="2.5" stroke-linecap="round" filter="url(#gold-glow)" />
+      <!-- Radar pulse ring at hotspot -->
+      <circle id="connector-pulse-start" cx="-100" cy="-100" r="10" fill="none" stroke="#f5a623" stroke-width="1.5" opacity="0" />
+      <!-- Start pin directly on hotspot -->
+      <circle id="connector-circle-start" cx="-100" cy="-100" r="5.5" fill="#f5a623" stroke="#ffffff" stroke-width="2" />
+      <!-- End dock pin directly on card -->
+      <circle id="connector-circle-end" cx="-100" cy="-100" r="5" fill="#f5a623" stroke="#ffffff" stroke-width="2" />
+    </svg>
+
+    <div id="hotspot-card" class="compact-card">
+      <!-- Header -->
+      <div id="card-header">
+        <div class="card-header-left">
+          <span id="card-category-badge"></span>
+          <h2 id="card-title"></h2>
+        </div>
+        <div class="card-header-right">
+          <span id="card-risk-badge"></span>
+          <button id="card-close" aria-label="Tutup">✕</button>
+        </div>
+      </div>
+
+      <!-- Tab Navigation -->
+      <div class="card-tabs-nav" id="card-tabs-nav">
+        <button class="card-tab-btn active" data-tab="tab-methods">
+          <span class="tab-icon">📋</span> Modus
+        </button>
+        <button class="card-tab-btn" data-tab="tab-indicators">
+          <span class="tab-icon">⚠️</span> Indikasi
+        </button>
+        <button class="card-tab-btn" data-tab="tab-detection">
+          <span class="tab-icon">🔍</span> Deteksi
+        </button>
+        <button class="card-tab-btn" data-tab="tab-gallery">
+          <span class="tab-icon">📷</span> Foto
+        </button>
+        <button class="card-tab-btn" data-tab="tab-risk">
+          <span class="tab-icon">🚨</span> Risiko
+        </button>
+      </div>
+
+      <!-- Tab Contents -->
+      <div id="card-body" class="tab-body">
+        <!-- Tab 1: Modus Operandi -->
+        <div class="card-tab-pane active" id="tab-methods">
+          <div class="section-label">📋 MODUS OPERANDI</div>
+          <ul id="methods-list" class="styled-list"></ul>
+          <div class="inspection-note-wrap">
+            <div class="section-label">📋 CATATAN PETUGAS DJBC</div>
+            <div id="inspection-note-box"></div>
+          </div>
+        </div>
+
+        <!-- Tab 2: Tanda Mencurigakan -->
+        <div class="card-tab-pane" id="tab-indicators">
+          <div class="section-label">⚠️ TANDA-TANDA MENCURIGAKAN</div>
+          <ul id="indicators-list" class="styled-list"></ul>
+        </div>
+
+        <!-- Tab 3: Metode Pengungkapan -->
+        <div class="card-tab-pane" id="tab-detection">
+          <div class="section-label">🔍 METODE PENGUNGKAPAN</div>
+          <ul id="detection-list" class="styled-list"></ul>
+        </div>
+
+        <!-- Tab 4: Dokumentasi / Foto -->
+        <div class="card-tab-pane" id="tab-gallery">
+          <div class="section-label">📷 DOKUMENTASI VISUAL & ANATOMI</div>
+          <div id="gallery-grid">
+            <!-- Injected by HotspotCard.js -->
+          </div>
+        </div>
+
+        <!-- Tab 5: Tingkat Risiko & Bahaya Medis -->
+        <div class="card-tab-pane" id="tab-risk">
+          <div class="section-label">🚨 TINGKAT RISIKO</div>
+          <div id="risk-meter">
+            <div id="risk-bar-track">
+              <div id="risk-bar"></div>
+            </div>
+            <div id="risk-labels">
+              <span>Rendah</span><span>Sedang</span><span>Tinggi</span><span>Kritis</span>
+            </div>
+          </div>
+          <div class="risk-desc-box">
+            <span class="desc-label">Risiko Medis:</span>
+            <p id="risk-description"></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div id="card-footer">
+        <button id="card-prev" class="card-nav-btn">← Sebelumnya</button>
+        <div id="card-progress-indicator">
+          <div id="card-progress-dots"></div>
+          <span id="card-progress-text"></span>
+        </div>
+        <button id="card-next" class="card-nav-btn">Berikutnya →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════ QUIZ MODAL ══════════════════════════════════ -->
+  <div id="quiz-overlay" class="hidden">
+    <div id="quiz-card">
+      <div id="quiz-header">
+        <h2>📝 Kuis Penilaian Kompetensi</h2>
+        <span id="quiz-progress-label">Soal 1 / 10</span>
+      </div>
+      <div id="quiz-body">
+        <div id="quiz-question"></div>
+        <div id="quiz-options"></div>
+        <div id="quiz-feedback" class="hidden"></div>
+      </div>
+      <div id="quiz-footer">
+        <button id="quiz-next-btn" class="btn-primary hidden">Soal Berikutnya →</button>
+        <button id="quiz-submit-btn" class="btn-primary hidden">Selesai & Lihat Hasil</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════ RESULT MODAL ══════════════════════════════════ -->
+  <div id="result-overlay" class="hidden">
+    <div id="result-card">
+      <div id="result-icon"></div>
+      <h2 id="result-title"></h2>
+      <div id="result-score-display"></div>
+      <p id="result-message"></p>
+      <div id="result-actions">
+        <button id="btn-retry-quiz" class="btn-secondary">Ulangi Kuis</button>
+        <button id="btn-review" class="btn-primary">Kembali ke Materi</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="main.js"></script>
+</body>
+</html>

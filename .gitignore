@@ -1,0 +1,26 @@
+﻿# Dependencies
+node_modules/
+.pnpm-store/
+
+# Production build outputs
+dist/
+*.log
+
+# Third-party tools
+Pixal3D/
+
+# Large local zip archives & experimental test models
+*.zip
+2023_hyundai_creta.glb
+ford_ranger_next-gen_2023_sport.glb
+generic_man.glb
+mmc_generic_small_suv_car.glb
+david_-_lod_man_character.glb
+output.glb
+
+# Environment & IDE
+.env
+.env.local
+.vscode/
+.idea/
+.DS_Store
