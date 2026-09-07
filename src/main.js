@@ -60,11 +60,6 @@ function setupRotationControls() {
   const btnNext = document.getElementById('btn-carousel-next');
   const canvasWrap = document.getElementById('body-canvas-wrapper');
 
-  // Angle Pills in Bottom Right
-  const pillFront = document.getElementById('pill-view-front');
-  const pillSide = document.getElementById('pill-view-side');
-  const pillBack = document.getElementById('pill-view-back');
-
   // Putar ke sudut sebelumnya (‹)
   btnPrev?.addEventListener('click', () => {
     stopAutoPlay();
@@ -84,28 +79,6 @@ function setupRotationControls() {
     const idx = ANGLES.indexOf(currentAngle);
     const nextIdx = (idx + 1) % ANGLES.length;
     setBodyAngle(ANGLES[nextIdx]);
-  });
-
-  // Tampak Depan (0°)
-  pillFront?.addEventListener('click', () => {
-    stopAutoPlay();
-    setBodyAngle(0);
-  });
-
-  // Tampak Samping (90° / 270°)
-  pillSide?.addEventListener('click', () => {
-    stopAutoPlay();
-    if (currentAngle === 90) {
-      setBodyAngle(270);
-    } else {
-      setBodyAngle(90);
-    }
-  });
-
-  // Tampak Belakang (180°)
-  pillBack?.addEventListener('click', () => {
-    stopAutoPlay();
-    setBodyAngle(180);
   });
 
   // Drag / Swipe 360° gesture interaction
@@ -234,15 +207,6 @@ function setBodyAngle(angle) {
   if (nameText) nameText.textContent = angleInfo.label;
   if (subText) subText.textContent = `(${angleInfo.sub})`;
 
-  // Update Angle Pills in Bottom Right
-  const pillFront = document.getElementById('pill-view-front');
-  const pillSide = document.getElementById('pill-view-side');
-  const pillBack = document.getElementById('pill-view-back');
-
-  if (pillFront) pillFront.classList.toggle('active', angle === 0);
-  if (pillSide) pillSide.classList.toggle('active', angle === 90 || angle === 270);
-  if (pillBack) pillBack.classList.toggle('active', angle === 180);
-
   // Update Body Image
   const img = document.getElementById('main-body-img');
   if (img && img.src !== angleInfo.image) {
@@ -288,6 +252,10 @@ function renderHotspotsForCurrentAngle() {
       <div class="pin-point"></div>
     `;
 
+    pin.addEventListener('pointerdown', (e) => {
+      e.stopPropagation();
+    });
+
     pin.addEventListener('click', (e) => {
       e.stopPropagation();
       openHotspotModal(hs.id);
@@ -309,7 +277,10 @@ function setupDetailModal() {
 
   // Close handlers
   const closeModal = () => {
-    overlay?.classList.add('hidden');
+    if (overlay) {
+      overlay.classList.add('hidden');
+      overlay.style.display = 'none';
+    }
   };
 
   btnClose?.addEventListener('click', closeModal);
@@ -320,7 +291,7 @@ function setupDetailModal() {
   });
 
   window.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && !overlay.classList.contains('hidden')) {
+    if (e.key === 'Escape' && overlay && !overlay.classList.contains('hidden')) {
       closeModal();
     }
   });
@@ -391,15 +362,22 @@ function openHotspotModal(id, syncAngle = false) {
     }
   });
 
+  // Display overlay immediately with explicit flex display
+  const overlay = document.getElementById('hotspot-card-modal-overlay');
+  if (overlay) {
+    overlay.classList.remove('hidden');
+    overlay.style.display = 'flex';
+  }
+
   // Render Modal Content
-  renderModalContent(hs);
+  try {
+    renderModalContent(hs);
+  } catch (err) {
+    console.error('Error rendering modal content:', err);
+  }
 
   // Default to Tab 1
   switchCardTab('tab-modus');
-
-  // Show Modal
-  const overlay = document.getElementById('hotspot-card-modal-overlay');
-  overlay?.classList.remove('hidden');
 }
 
 function renderModalContent(hs) {
@@ -458,14 +436,18 @@ function renderModalContent(hs) {
       findingsGrid.appendChild(a);
     });
 
-    // Re-init GLightbox
-    if (typeof window.GLightbox !== 'undefined') {
-      if (glightboxInstance) glightboxInstance.destroy();
-      glightboxInstance = window.GLightbox({
-        selector: '.glightbox',
-        touchNavigation: true,
-        loop: true
-      });
+    // Re-init GLightbox safely
+    try {
+      if (typeof window.GLightbox !== 'undefined') {
+        if (glightboxInstance) glightboxInstance.destroy();
+        glightboxInstance = window.GLightbox({
+          selector: '.glightbox',
+          touchNavigation: true,
+          loop: true
+        });
+      }
+    } catch (gErr) {
+      console.warn('GLightbox init warning:', gErr);
     }
   }
 
