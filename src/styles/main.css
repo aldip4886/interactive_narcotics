@@ -568,17 +568,19 @@ button {
 
 .body-image-container {
   height: 94%;
-  max-width: 90%;
+  max-height: 520px;
+  aspect-ratio: 260 / 560;
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
   user-select: none;
+  margin: 0 auto;
 }
 
 .main-body-img {
+  width: 100%;
   height: 100%;
-  width: auto;
   max-height: 520px;
   object-fit: contain;
   pointer-events: none;
@@ -602,39 +604,43 @@ button {
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
 
-/* Hotspots Layer */
+/* Hotspots Layer - Exactly overlaid on body image */
 .hotspots-layer {
   position: absolute;
-  inset: 0;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   pointer-events: none;
 }
 
 .body-hotspot-pin {
   position: absolute;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, calc(-100% + 5px));
   pointer-events: auto;
   cursor: pointer;
   display: flex;
   flex-direction: column;
   align-items: center;
-  transition: transform 0.2s ease;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   z-index: 20;
 }
 
 .body-hotspot-pin:hover {
-  transform: translate(-50%, -50%) scale(1.1);
+  transform: translate(-50%, calc(-100% + 5px)) scale(1.12);
+  z-index: 30;
 }
 
 .pin-badge {
   display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 4px 10px;
-  border-radius: 16px;
+  gap: 5px;
+  padding: 3px 8px;
+  border-radius: 14px;
   background: #FFFFFF;
   border: 1.5px solid var(--border-medium);
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.14);
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 700;
   color: var(--djbc-navy-dark);
   white-space: nowrap;
@@ -645,16 +651,17 @@ button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
   border-radius: 50%;
   background: var(--djbc-navy-main);
   color: #FFFFFF;
-  font-size: 9.5px;
+  font-size: 9px;
   font-weight: 800;
 }
 
 .pin-point {
+  position: relative;
   width: 10px;
   height: 10px;
   border-radius: 50%;
@@ -662,6 +669,24 @@ button {
   border: 2px solid #FFFFFF;
   box-shadow: 0 0 8px rgba(245, 166, 35, 0.9);
   margin-top: 2px;
+}
+
+.pin-point::after {
+  content: '';
+  position: absolute;
+  top: -4px;
+  left: -4px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 1.5px solid var(--djbc-gold);
+  animation: pinPulse 2s infinite ease-out;
+  pointer-events: none;
+}
+
+@keyframes pinPulse {
+  0% { transform: scale(0.8); opacity: 1; }
+  100% { transform: scale(2.2); opacity: 0; }
 }
 
 .body-hotspot-pin.active .pin-badge {

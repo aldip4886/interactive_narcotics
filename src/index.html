@@ -199,13 +199,12 @@
 
             <!-- Body Canvas & Hotspot Layer -->
             <div class="body-canvas-wrapper" id="body-canvas-wrapper">
-              <!-- Central Active Body Image (Changes smoothly with slider rotation) -->
+              <!-- Central Active Body Image with Hotspots Layer directly anchored -->
               <div class="body-image-container" id="body-image-container">
                 <img src="assets/body_views/body_view_0_front.png" alt="Anatomi Tubuh Peraga Manusia" id="main-body-img" class="main-body-img" />
+                <!-- Interactive Hotspot Pins Layer (Positioned dynamically per angle) -->
+                <div id="hotspots-layer" class="hotspots-layer"></div>
               </div>
-
-              <!-- Interactive Hotspot Pins Layer (Positioned dynamically per angle) -->
-              <div id="hotspots-layer" class="hotspots-layer"></div>
 
               <!-- Drag / Swipe to rotate hint -->
               <div class="body-drag-hint">
