@@ -1,4 +1,3 @@
-import { gsap } from 'gsap';
 import hotspotsData from './data/hotspots.json';
 import { QuizModule } from './modules/QuizModule.js';
 import { SCORMAdapter } from './modules/SCORMAdapter.js';
@@ -7,23 +6,13 @@ import { SCORMAdapter } from './modules/SCORMAdapter.js';
 // Application State
 // ─────────────────────────────────────────────────────────────
 let currentHotspotId = 'saluran-cerna';
-const visitedHotspots = new Set(['saluran-cerna']);
-let currentCategory = 'all';
+const visitedHotspots = new Set();
 let currentActiveTab = 'tab-modus';
 let currentAngle = 0; // 0, 90, 180, 270
-let isAutoRotating = false;
-let autoRotateInterval = null;
-let is3DMode = false;
 
 let scorm;
 let quiz;
 let glightboxInstance = null;
-
-// 3D lazy state
-let scene3D = null;
-let bodyViewer = null;
-let xrayCtrl = null;
-let threeInitialized = false;
 
 // ─────────────────────────────────────────────────────────────
 // Initialization
@@ -46,30 +35,15 @@ function initApp() {
 
   // Setup Event Handlers
   setupSidebar();
-  setupFilterPills();
-  setupStepNav();
-  setupCardTabs();
-  setupCardNavigation();
   setupRotationControls();
-  setupCarousel();
-  setupViewModeToggle();
+  setupDetailModal();
   setupHelpModal();
   setupResultModal();
+  setupQuizTrigger();
 
-  // Initial display
-  setBodyAngle(0, false);
-  selectHotspot('saluran-cerna', false, false);
+  // Initial body angle
+  setBodyAngle(0, true);
   updateProgressUI();
-
-  // Resize listener to re-align connector line
-  window.addEventListener('resize', () => {
-    updateConnectorLine(false);
-  });
-
-  // Initial connector line animation after slight layout settle
-  setTimeout(() => {
-    updateConnectorLine(true);
-  }, 300);
 }
 
 // ─────────────────────────────────────────────────────────────
@@ -78,32 +52,11 @@ function initApp() {
 function setupRotationControls() {
   const slider = document.getElementById('body-rotation-slider');
   const canvasWrap = document.getElementById('body-canvas-wrapper');
-  const quickBtns = document.querySelectorAll('.angle-quick-btn');
-  const autoBtn = document.getElementById('btn-toggle-autorotate');
 
   // Slider change & input
   slider?.addEventListener('input', (e) => {
     const val = parseInt(e.target.value, 10);
     applySliderAngle(val);
-  });
-
-  // Quick Angle Buttons (0, 90, 180, 270)
-  quickBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      stopAutoRotate();
-      const deg = parseInt(btn.getAttribute('data-angle'), 10);
-      if (slider) slider.value = deg;
-      setBodyAngle(deg, true);
-    });
-  });
-
-  // Auto-Rotate 360° Toggle
-  autoBtn?.addEventListener('click', () => {
-    if (isAutoRotating) {
-      stopAutoRotate();
-    } else {
-      startAutoRotate();
-    }
   });
 
   // Interactive Drag / Touch Swipe to spin body
@@ -123,7 +76,7 @@ function setupRotationControls() {
   canvasWrap?.addEventListener('pointermove', (e) => {
     if (!isDragging) return;
     const deltaX = e.clientX - startX;
-    // 300px drag = 360 deg
+    // 280px drag = 360 deg
     let newAngle = Math.round((startAngle + (deltaX / 280) * 360) % 360);
     if (newAngle < 0) newAngle += 360;
     if (slider) slider.value = newAngle;
@@ -175,51 +128,18 @@ function setBodyAngle(angle, syncSlider = true, rawSliderVal = null) {
   if (nameText) nameText.textContent = angleInfo.label;
   if (subText) subText.textContent = `(${angleInfo.sub})`;
 
-  // Update Quick Angle Buttons
-  document.querySelectorAll('.angle-quick-btn').forEach(b => {
-    const a = parseInt(b.getAttribute('data-angle'), 10);
-    if (a === angle) b.classList.add('active');
-    else b.classList.remove('active');
-  });
-
   // Update Body Image
   const img = document.getElementById('main-body-img');
   if (img && img.src !== angleInfo.image) {
-    img.style.opacity = '0.4';
+    img.style.opacity = '0.35';
     img.src = angleInfo.image;
     img.onload = () => {
       img.style.opacity = '1';
       renderHotspotsForCurrentAngle();
-      updateConnectorLine(true);
     };
   } else {
     renderHotspotsForCurrentAngle();
-    updateConnectorLine(false);
   }
-}
-
-function startAutoRotate() {
-  isAutoRotating = true;
-  const btn = document.getElementById('btn-toggle-autorotate');
-  const icon = document.getElementById('autorotate-icon');
-  btn?.classList.add('active');
-  if (icon) icon.textContent = '⏸';
-
-  const angles = [0, 90, 180, 270];
-  let idx = angles.indexOf(currentAngle);
-  autoRotateInterval = setInterval(() => {
-    idx = (idx + 1) % angles.length;
-    setBodyAngle(angles[idx], true);
-  }, 3500);
-}
-
-function stopAutoRotate() {
-  isAutoRotating = false;
-  clearInterval(autoRotateInterval);
-  const btn = document.getElementById('btn-toggle-autorotate');
-  const icon = document.getElementById('autorotate-icon');
-  btn?.classList.remove('active');
-  if (icon) icon.textContent = '▶';
 }
 
 // ─────────────────────────────────────────────────────────────
@@ -232,22 +152,18 @@ function renderHotspotsForCurrentAngle() {
   layer.innerHTML = '';
 
   hotspotsData.hotspots.forEach(hs => {
-    // Check if visible in this angle
+    // Check if visible in current angle
     const isVisibleInAngle = hs.visibleAngles.includes(currentAngle);
     if (!isVisibleInAngle) return;
 
-    // Check if matches category filter
-    const matchesCategory = currentCategory === 'all' || hs.categoryId === currentCategory;
-
     const coords = hs.coordsByAngle[String(currentAngle)] || { x: 50, y: 50 };
-    const isActive = hs.id === currentHotspotId;
+    const isVisited = visitedHotspots.has(hs.id);
 
     const pin = document.createElement('div');
-    pin.className = `body-hotspot-pin ${isActive ? 'active' : ''}`;
+    pin.className = `body-hotspot-pin ${hs.id === currentHotspotId ? 'active' : ''}`;
     pin.setAttribute('data-id', hs.id);
     pin.style.left = `${coords.x}%`;
     pin.style.top = `${coords.y}%`;
-    pin.style.opacity = matchesCategory ? '1' : '0.35';
 
     pin.innerHTML = `
       <div class="pin-badge">
@@ -259,7 +175,7 @@ function renderHotspotsForCurrentAngle() {
 
     pin.addEventListener('click', (e) => {
       e.stopPropagation();
-      selectHotspot(hs.id, true, false);
+      openHotspotModal(hs.id);
     });
 
     layer.appendChild(pin);
@@ -267,9 +183,47 @@ function renderHotspotsForCurrentAngle() {
 }
 
 // ─────────────────────────────────────────────────────────────
-// 3. Card Tab Switching Logic
+// 3. Tabbed Hotspot Modal Dialog
 // ─────────────────────────────────────────────────────────────
-function setupCardTabs() {
+function setupDetailModal() {
+  const overlay = document.getElementById('hotspot-card-modal-overlay');
+  const btnClose = document.getElementById('btn-close-detail-modal');
+  const btnFooterClose = document.getElementById('btn-modal-close-footer');
+  const btnPrev = document.getElementById('btn-prev-hotspot');
+  const btnNext = document.getElementById('btn-next-hotspot');
+
+  // Close handlers
+  const closeModal = () => {
+    overlay?.classList.add('hidden');
+  };
+
+  btnClose?.addEventListener('click', closeModal);
+  btnFooterClose?.addEventListener('click', closeModal);
+
+  overlay?.addEventListener('click', (e) => {
+    if (e.target === overlay) closeModal();
+  });
+
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !overlay.classList.contains('hidden')) {
+      closeModal();
+    }
+  });
+
+  // Prev / Next Modus
+  btnPrev?.addEventListener('click', () => {
+    const idx = hotspotsData.hotspots.findIndex(h => h.id === currentHotspotId);
+    const prevIdx = (idx - 1 + hotspotsData.hotspots.length) % hotspotsData.hotspots.length;
+    openHotspotModal(hotspotsData.hotspots[prevIdx].id, true);
+  });
+
+  btnNext?.addEventListener('click', () => {
+    const idx = hotspotsData.hotspots.findIndex(h => h.id === currentHotspotId);
+    const nextIdx = (idx + 1) % hotspotsData.hotspots.length;
+    openHotspotModal(hotspotsData.hotspots[nextIdx].id, true);
+  });
+
+  // Tab switching
   const tabBtns = document.querySelectorAll('.card-tabs-nav .tab-btn');
   tabBtns.forEach(btn => {
     btn.addEventListener('click', () => {
@@ -282,67 +236,18 @@ function setupCardTabs() {
 function switchCardTab(tabId) {
   currentActiveTab = tabId;
 
-  // Update Tab Buttons
   document.querySelectorAll('.card-tabs-nav .tab-btn').forEach(b => {
     if (b.getAttribute('data-tab') === tabId) b.classList.add('active');
     else b.classList.remove('active');
   });
 
-  // Update Tab Panes
   document.querySelectorAll('.tab-content-container .tab-pane').forEach(p => {
     if (p.id === tabId) p.classList.add('active');
     else p.classList.remove('active');
   });
-
-  // Synchronize Step Pills on Top-Right
-  document.querySelectorAll('#step-nav-pills .step-pill').forEach(pill => {
-    const target = pill.getAttribute('data-tab-target');
-    if (target === tabId) pill.classList.add('active');
-    else if (target) pill.classList.remove('active');
-  });
 }
 
-function setupStepNav() {
-  const stepPills = document.querySelectorAll('#step-nav-pills .step-pill');
-  stepPills.forEach(pill => {
-    pill.addEventListener('click', () => {
-      const targetTab = pill.getAttribute('data-tab-target');
-      if (targetTab) {
-        switchCardTab(targetTab);
-      }
-    });
-  });
-
-  const quizBtn = document.getElementById('btn-open-quiz');
-  quizBtn?.addEventListener('click', () => {
-    quiz.start();
-  });
-}
-
-// ─────────────────────────────────────────────────────────────
-// 4. Card Sequential Navigation (Prev / Next)
-// ─────────────────────────────────────────────────────────────
-function setupCardNavigation() {
-  const btnPrev = document.getElementById('btn-prev-hotspot');
-  const btnNext = document.getElementById('btn-next-hotspot');
-
-  btnPrev?.addEventListener('click', () => {
-    const idx = hotspotsData.hotspots.findIndex(h => h.id === currentHotspotId);
-    const prevIdx = (idx - 1 + hotspotsData.hotspots.length) % hotspotsData.hotspots.length;
-    selectHotspot(hotspotsData.hotspots[prevIdx].id, true, true);
-  });
-
-  btnNext?.addEventListener('click', () => {
-    const idx = hotspotsData.hotspots.findIndex(h => h.id === currentHotspotId);
-    const nextIdx = (idx + 1) % hotspotsData.hotspots.length;
-    selectHotspot(hotspotsData.hotspots[nextIdx].id, true, true);
-  });
-}
-
-// ─────────────────────────────────────────────────────────────
-// 5. Select Hotspot & Update Tabbed Card
-// ─────────────────────────────────────────────────────────────
-function selectHotspot(id, animateLine = true, autoRotateBody = true) {
+function openHotspotModal(id, syncAngle = false) {
   const hs = hotspotsData.hotspots.find(h => h.id === id);
   if (!hs) return;
 
@@ -350,34 +255,26 @@ function selectHotspot(id, animateLine = true, autoRotateBody = true) {
   visitedHotspots.add(id);
   updateProgressUI();
 
-  // If hotspot is not visible in current angle, automatically rotate to its primary angle!
-  if (autoRotateBody && !hs.visibleAngles.includes(currentAngle)) {
+  // If syncAngle is requested or hotspot is not in current angle
+  if (syncAngle && !hs.visibleAngles.includes(currentAngle)) {
     setBodyAngle(hs.primaryAngle, true);
   }
 
-  // Update Carousel Selection & Scroll into view
-  const cards = document.querySelectorAll('.carousel-card');
-  cards.forEach(card => {
-    if (card.getAttribute('data-id') === id) {
-      card.classList.add('active');
-      card.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-    } else {
-      card.classList.remove('active');
-    }
-  });
-
-  // Re-render pins so active class updates
+  // Update pin active state
   renderHotspotsForCurrentAngle();
 
-  // Render Tabbed Detail Card
-  renderTabbedDetailCard(hs);
+  // Render Modal Content
+  renderModalContent(hs);
 
-  // Update Animated Wipe Connector Line
-  setTimeout(() => updateConnectorLine(animateLine), 80);
+  // Default to Tab 1
+  switchCardTab('tab-modus');
+
+  // Show Modal
+  const overlay = document.getElementById('hotspot-card-modal-overlay');
+  overlay?.classList.remove('hidden');
 }
 
-function renderTabbedDetailCard(hs) {
-  // Counter
+function renderModalContent(hs) {
   const idx = hotspotsData.hotspots.findIndex(h => h.id === hs.id);
   const counter = document.getElementById('card-nav-counter');
   if (counter) counter.textContent = `${idx + 1} / ${hotspotsData.hotspots.length}`;
@@ -476,175 +373,7 @@ function renderTabbedDetailCard(hs) {
 }
 
 // ─────────────────────────────────────────────────────────────
-// 6. Dynamic Straight SVG Connector with Golden Wipe Animation
-// ─────────────────────────────────────────────────────────────
-function updateConnectorLine(animate = true) {
-  if (is3DMode) {
-    hideConnectorLine();
-    return;
-  }
-
-  const wrapper = document.getElementById('body-canvas-wrapper');
-  const activePin = document.querySelector(`.body-hotspot-pin[data-id="${currentHotspotId}"]`);
-  const detailHeader = document.querySelector('.detail-header');
-
-  if (!wrapper || !activePin || !detailHeader) {
-    hideConnectorLine();
-    return;
-  }
-
-  const wrapRect = wrapper.getBoundingClientRect();
-  const pinPoint = activePin.querySelector('.pin-point') || activePin;
-  const pinRect = pinPoint.getBoundingClientRect();
-  const headerRect = detailHeader.getBoundingClientRect();
-
-  // Start at pin point
-  const x1 = pinRect.left + pinRect.width / 2 - wrapRect.left;
-  const y1 = pinRect.top + pinRect.height / 2 - wrapRect.top;
-
-  // End directly at left border of detail card
-  const x2 = headerRect.left - wrapRect.left;
-  const y2 = headerRect.top + 26 - wrapRect.top;
-
-  const lineGlow = document.getElementById('stage-line-glow');
-  const lineCore = document.getElementById('stage-line-core');
-  const cStart = document.getElementById('stage-circle-start');
-  const cEnd = document.getElementById('stage-circle-end');
-
-  if (!lineCore || !lineGlow || !cStart || !cEnd) return;
-
-  // Set positions
-  cStart.setAttribute('cx', x1);
-  cStart.setAttribute('cy', y1);
-  cEnd.setAttribute('cx', x2);
-  cEnd.setAttribute('cy', y2);
-
-  lineGlow.setAttribute('x1', x1);
-  lineGlow.setAttribute('y1', y1);
-  lineGlow.setAttribute('x2', x2);
-  lineGlow.setAttribute('y2', y2);
-
-  lineCore.setAttribute('x1', x1);
-  lineCore.setAttribute('y1', y1);
-  lineCore.setAttribute('x2', x2);
-  lineCore.setAttribute('y2', y2);
-
-  lineGlow.style.opacity = '1';
-  lineCore.style.opacity = '1';
-  cStart.style.opacity = '1';
-  cEnd.style.opacity = '1';
-
-  // Wipe Animation
-  const dx = x2 - x1;
-  const dy = y2 - y1;
-  const length = Math.sqrt(dx * dx + dy * dy);
-
-  lineCore.style.strokeDasharray = `${length} ${length}`;
-  lineGlow.style.strokeDasharray = `${length} ${length}`;
-
-  if (animate) {
-    lineCore.style.strokeDashoffset = length;
-    lineGlow.style.strokeDashoffset = length;
-
-    gsap.killTweensOf([lineCore, lineGlow, cStart, cEnd]);
-    gsap.fromTo(cStart, { scale: 0.5, transformOrigin: 'center center' }, { scale: 1, duration: 0.2, ease: 'back.out(2)' });
-    gsap.to([lineCore, lineGlow], {
-      strokeDashoffset: 0,
-      duration: 0.45,
-      ease: 'power2.out',
-      onComplete: () => {
-        gsap.fromTo(cEnd, { scale: 0.6, transformOrigin: 'center center' }, { scale: 1, duration: 0.2, ease: 'back.out(2)' });
-      }
-    });
-  } else {
-    lineCore.style.strokeDashoffset = 0;
-    lineGlow.style.strokeDashoffset = 0;
-  }
-}
-
-function hideConnectorLine() {
-  const lineGlow = document.getElementById('stage-line-glow');
-  const lineCore = document.getElementById('stage-line-core');
-  const cStart = document.getElementById('stage-circle-start');
-  const cEnd = document.getElementById('stage-circle-end');
-  if (lineGlow) lineGlow.style.opacity = '0';
-  if (lineCore) lineCore.style.opacity = '0';
-  if (cStart) cStart.style.opacity = '0';
-  if (cEnd) cEnd.style.opacity = '0';
-}
-
-// ─────────────────────────────────────────────────────────────
-// 7. Filter Pills (Fokus Area Tubuh)
-// ─────────────────────────────────────────────────────────────
-function setupFilterPills() {
-  const filterPills = document.querySelectorAll('.filter-pill');
-  filterPills.forEach(pill => {
-    pill.addEventListener('click', () => {
-      const cat = pill.getAttribute('data-category');
-      filterPills.forEach(p => p.classList.remove('active'));
-      pill.classList.add('active');
-      filterCategory(cat);
-    });
-  });
-}
-
-function filterCategory(catId) {
-  currentCategory = catId;
-
-  // Highlight/dim carousel items
-  const cards = document.querySelectorAll('.carousel-card');
-  cards.forEach(card => {
-    const hsId = card.getAttribute('data-id');
-    const hs = hotspotsData.hotspots.find(h => h.id === hsId);
-    if (!hs) return;
-
-    if (catId === 'all' || hs.categoryId === catId) {
-      card.style.opacity = '1';
-    } else {
-      card.style.opacity = '0.45';
-    }
-  });
-
-  // Re-render pins with category dimming
-  renderHotspotsForCurrentAngle();
-
-  // If currently active hotspot doesn't match, select first matching
-  const currentHs = hotspotsData.hotspots.find(h => h.id === currentHotspotId);
-  if (catId !== 'all' && currentHs && currentHs.categoryId !== catId) {
-    const match = hotspotsData.hotspots.find(h => h.categoryId === catId);
-    if (match) {
-      selectHotspot(match.id, true, true);
-    }
-  }
-}
-
-// ─────────────────────────────────────────────────────────────
-// 8. Bottom Carousel Strip
-// ─────────────────────────────────────────────────────────────
-function setupCarousel() {
-  const track = document.getElementById('carousel-items-track');
-  const btnLeft = document.getElementById('btn-carousel-scroll-left');
-  const btnRight = document.getElementById('btn-carousel-scroll-right');
-
-  btnLeft?.addEventListener('click', () => {
-    track.scrollBy({ left: -220, behavior: 'smooth' });
-  });
-
-  btnRight?.addEventListener('click', () => {
-    track.scrollBy({ left: 220, behavior: 'smooth' });
-  });
-
-  const cards = document.querySelectorAll('.carousel-card');
-  cards.forEach(card => {
-    card.addEventListener('click', () => {
-      const id = card.getAttribute('data-id');
-      selectHotspot(id, true, true);
-    });
-  });
-}
-
-// ─────────────────────────────────────────────────────────────
-// 9. Sidebar Management
+// 4. Sidebar Management
 // ─────────────────────────────────────────────────────────────
 function setupSidebar() {
   const toggleBtn = document.getElementById('btn-toggle-sidebar');
@@ -652,7 +381,6 @@ function setupSidebar() {
 
   toggleBtn?.addEventListener('click', () => {
     sidebar.classList.toggle('collapsed');
-    setTimeout(() => updateConnectorLine(false), 260);
   });
 
   const moduleItems = document.querySelectorAll('.module-item');
@@ -665,7 +393,7 @@ function setupSidebar() {
 }
 
 // ─────────────────────────────────────────────────────────────
-// 10. Progress UI & SCORM
+// 5. Progress UI & SCORM
 // ─────────────────────────────────────────────────────────────
 function updateProgressUI() {
   const total = hotspotsData.hotspots.length;
@@ -688,64 +416,15 @@ function updateProgressUI() {
 }
 
 // ─────────────────────────────────────────────────────────────
-// 11. 2D / 3D Mode Switcher
+// 6. Quiz & Help Modals
 // ─────────────────────────────────────────────────────────────
-function setupViewModeToggle() {
-  const btn = document.getElementById('btn-toggle-viewmode');
-  const label = document.getElementById('viewmode-label');
-  const rotatableView = document.getElementById('rotatable-body-view');
-  const threeStage = document.getElementById('three-stage-container');
-
-  btn?.addEventListener('click', async () => {
-    is3DMode = !is3DMode;
-
-    if (is3DMode) {
-      label.textContent = 'Mode: 3D Interaktif';
-      rotatableView.classList.add('hidden');
-      threeStage.classList.remove('hidden');
-      hideConnectorLine();
-
-      if (!threeInitialized) {
-        await initThreeMode();
-      }
-    } else {
-      label.textContent = 'Mode: Anatomi 4-Sisi';
-      threeStage.classList.add('hidden');
-      rotatableView.classList.remove('hidden');
-      updateConnectorLine(true);
-    }
+function setupQuizTrigger() {
+  const btnQuiz = document.getElementById('btn-open-quiz');
+  btnQuiz?.addEventListener('click', () => {
+    quiz.start();
   });
 }
 
-async function initThreeMode() {
-  threeInitialized = true;
-  try {
-    const { SceneController } = await import('./modules/SceneController.js');
-    const { HumanBodyViewer } = await import('./modules/HumanBodyViewer.js');
-    const { XRayController } = await import('./modules/XRayController.js');
-    const modelUrl = (await import('./assets/models/human_body.glb?url')).default;
-
-    const canvas = document.getElementById('three-canvas');
-    scene3D = new SceneController(canvas);
-    bodyViewer = new HumanBodyViewer(scene3D.scene, () => {});
-    const { bodyMeshes, organMeshes } = await bodyViewer.load(modelUrl);
-    xrayCtrl = new XRayController(bodyMeshes, organMeshes);
-
-    document.getElementById('btn-xray')?.addEventListener('click', () => {
-      xrayCtrl?.toggle();
-    });
-
-    document.getElementById('btn-toggle-organs')?.addEventListener('click', () => {
-      bodyViewer?.toggleOrgans();
-    });
-  } catch (err) {
-    console.warn('3D mode loading fallback:', err);
-  }
-}
-
-// ─────────────────────────────────────────────────────────────
-// 12. Help & Result Modals
-// ─────────────────────────────────────────────────────────────
 function setupHelpModal() {
   const btnHelp = document.getElementById('btn-help-modal');
   const overlay = document.getElementById('help-overlay');
@@ -769,7 +448,6 @@ function setupResultModal() {
 
   btnReview?.addEventListener('click', () => {
     overlay.classList.add('hidden');
-    switchCardTab('tab-modus');
   });
 }
 

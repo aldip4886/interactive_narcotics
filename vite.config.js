@@ -10,14 +10,6 @@ export default defineConfig({
   build: {
     outDir: path.resolve(__dirname, "dist"),
     emptyOutDir: true,
-    assetsDir: "assets",
-    rollupOptions: {
-      output: {
-        manualChunks: {
-          three: ["three"],
-          gsap: ["gsap"]
-        }
-      }
-    }
+    assetsDir: "assets"
   }
 });
