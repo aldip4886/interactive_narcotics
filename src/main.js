@@ -47,41 +47,74 @@ function initApp() {
 }
 
 // ─────────────────────────────────────────────────────────────
-// 1. 4-Angle Body Rotation Navigation Controls (Left, Reset, Right)
+// 1. Camera Controls: 360° Pedestal Carousel, Angle Pills & Zoom
 // ─────────────────────────────────────────────────────────────
 const ANGLES = [0, 90, 180, 270];
+let isAutoPlaying = false;
+let autoPlayTimer = null;
+let currentZoom = 1.0;
 
 function setupRotationControls() {
-  const btnLeft = document.getElementById('btn-rotate-left');
-  const btnReset = document.getElementById('btn-rotate-reset');
-  const btnRight = document.getElementById('btn-rotate-right');
+  const btnPrev = document.getElementById('btn-carousel-prev');
+  const btnPlay = document.getElementById('btn-carousel-play');
+  const btnNext = document.getElementById('btn-carousel-next');
   const canvasWrap = document.getElementById('body-canvas-wrapper');
 
-  // Ke Kiri (Putar Berlawanan Jarum Jam: 0 -> 270 -> 180 -> 90 -> 0)
-  btnLeft?.addEventListener('click', () => {
+  // Angle Pills in Bottom Right
+  const pillFront = document.getElementById('pill-view-front');
+  const pillSide = document.getElementById('pill-view-side');
+  const pillBack = document.getElementById('pill-view-back');
+
+  // Putar ke sudut sebelumnya (‹)
+  btnPrev?.addEventListener('click', () => {
+    stopAutoPlay();
     const idx = ANGLES.indexOf(currentAngle);
     const prevIdx = (idx - 1 + ANGLES.length) % ANGLES.length;
     setBodyAngle(ANGLES[prevIdx]);
   });
 
-  // Reset (Kembali ke Tampak Depan 0°)
-  btnReset?.addEventListener('click', () => {
-    setBodyAngle(0);
+  // Auto-play / Pause toggle (▶ / ⏸)
+  btnPlay?.addEventListener('click', () => {
+    toggleAutoPlay();
   });
 
-  // Ke Kanan (Putar Searah Jarum Jam: 0 -> 90 -> 180 -> 270 -> 0)
-  btnRight?.addEventListener('click', () => {
+  // Putar ke sudut berikutnya (›)
+  btnNext?.addEventListener('click', () => {
+    stopAutoPlay();
     const idx = ANGLES.indexOf(currentAngle);
     const nextIdx = (idx + 1) % ANGLES.length;
     setBodyAngle(ANGLES[nextIdx]);
   });
 
-  // Interactive Drag / Touch Swipe to spin body
+  // Tampak Depan (0°)
+  pillFront?.addEventListener('click', () => {
+    stopAutoPlay();
+    setBodyAngle(0);
+  });
+
+  // Tampak Samping (90° / 270°)
+  pillSide?.addEventListener('click', () => {
+    stopAutoPlay();
+    if (currentAngle === 90) {
+      setBodyAngle(270);
+    } else {
+      setBodyAngle(90);
+    }
+  });
+
+  // Tampak Belakang (180°)
+  pillBack?.addEventListener('click', () => {
+    stopAutoPlay();
+    setBodyAngle(180);
+  });
+
+  // Drag / Swipe 360° gesture interaction
   let isDragging = false;
   let startX = 0;
 
   canvasWrap?.addEventListener('pointerdown', (e) => {
-    if (e.target.closest('.body-hotspot-pin')) return;
+    if (e.target.closest('.body-hotspot-pin') || e.target.closest('button')) return;
+    stopAutoPlay();
     isDragging = true;
     startX = e.clientX;
     canvasWrap.setPointerCapture(e.pointerId);
@@ -90,14 +123,14 @@ function setupRotationControls() {
   canvasWrap?.addEventListener('pointermove', (e) => {
     if (!isDragging) return;
     const deltaX = e.clientX - startX;
-    if (Math.abs(deltaX) > 45) {
+    if (Math.abs(deltaX) > 40) {
       const idx = ANGLES.indexOf(currentAngle);
       if (deltaX < 0) {
-        // Dragging left -> turn body clockwise
+        // Drag left -> turn clockwise
         const nextIdx = (idx + 1) % ANGLES.length;
         setBodyAngle(ANGLES[nextIdx]);
       } else {
-        // Dragging right -> turn body counter-clockwise
+        // Drag right -> turn counter-clockwise
         const prevIdx = (idx - 1 + ANGLES.length) % ANGLES.length;
         setBodyAngle(ANGLES[prevIdx]);
       }
@@ -114,6 +147,77 @@ function setupRotationControls() {
 
   canvasWrap?.addEventListener('pointerup', endDrag);
   canvasWrap?.addEventListener('pointercancel', endDrag);
+
+  // Initialize Zoom Controls
+  setupZoomControls();
+}
+
+function toggleAutoPlay() {
+  if (isAutoPlaying) {
+    stopAutoPlay();
+  } else {
+    startAutoPlay();
+  }
+}
+
+function startAutoPlay() {
+  isAutoPlaying = true;
+  const btnPlay = document.getElementById('btn-carousel-play');
+  const icon = document.getElementById('play-pause-icon');
+  if (btnPlay) btnPlay.classList.add('playing');
+  if (icon) icon.textContent = '⏸';
+
+  autoPlayTimer = setInterval(() => {
+    const idx = ANGLES.indexOf(currentAngle);
+    const nextIdx = (idx + 1) % ANGLES.length;
+    setBodyAngle(ANGLES[nextIdx]);
+  }, 1600);
+}
+
+function stopAutoPlay() {
+  if (!isAutoPlaying) return;
+  isAutoPlaying = false;
+  if (autoPlayTimer) {
+    clearInterval(autoPlayTimer);
+    autoPlayTimer = null;
+  }
+  const btnPlay = document.getElementById('btn-carousel-play');
+  const icon = document.getElementById('play-pause-icon');
+  if (btnPlay) btnPlay.classList.remove('playing');
+  if (icon) icon.textContent = '▶';
+}
+
+function setupZoomControls() {
+  const btnIn = document.getElementById('btn-zoom-in');
+  const btnOut = document.getElementById('btn-zoom-out');
+  const btnReset = document.getElementById('btn-zoom-reset');
+  const canvasWrap = document.getElementById('body-canvas-wrapper');
+
+  btnIn?.addEventListener('click', () => applyZoom(currentZoom + 0.15));
+  btnOut?.addEventListener('click', () => applyZoom(currentZoom - 0.15));
+  btnReset?.addEventListener('click', () => applyZoom(1.0));
+
+  // Wheel zoom over canvas wrapper
+  canvasWrap?.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    if (e.deltaY < 0) applyZoom(currentZoom + 0.1);
+    else applyZoom(currentZoom - 0.1);
+  }, { passive: false });
+}
+
+function applyZoom(val) {
+  currentZoom = Math.min(Math.max(val, 0.75), 2.2);
+  const container = document.getElementById('body-image-container');
+  const badge = document.getElementById('zoom-level-text');
+
+  if (container) {
+    container.style.transform = `scale(${currentZoom})`;
+    container.style.transformOrigin = 'center center';
+    container.style.transition = 'transform 0.15s ease';
+  }
+  if (badge) {
+    badge.textContent = `${Math.round(currentZoom * 100)}%`;
+  }
 }
 
 function setBodyAngle(angle) {
@@ -129,6 +233,15 @@ function setBodyAngle(angle) {
   if (degText) degText.textContent = `${angle}°`;
   if (nameText) nameText.textContent = angleInfo.label;
   if (subText) subText.textContent = `(${angleInfo.sub})`;
+
+  // Update Angle Pills in Bottom Right
+  const pillFront = document.getElementById('pill-view-front');
+  const pillSide = document.getElementById('pill-view-side');
+  const pillBack = document.getElementById('pill-view-back');
+
+  if (pillFront) pillFront.classList.toggle('active', angle === 0);
+  if (pillSide) pillSide.classList.toggle('active', angle === 90 || angle === 270);
+  if (pillBack) pillBack.classList.toggle('active', angle === 180);
 
   // Update Body Image
   const img = document.getElementById('main-body-img');
