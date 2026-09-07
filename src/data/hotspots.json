@@ -2,35 +2,35 @@
   "categories": [
     {
       "id": "all",
-      "label": "Seluruh Modus",
+      "label": "Seluruh Modus (8 Hotspot)",
       "icon": "✨",
       "color": "#F5A623"
     },
     {
       "id": "ingestion",
       "label": "Metode Ingestion",
-      "sub": "Rongga Mulut & Lambung",
-      "icon": "⏱️",
+      "sub": "1. Rongga Mulut & 2. Lambung",
+      "icon": "👄",
       "color": "#F5A623"
     },
     {
       "id": "insertion",
       "label": "Metode Insertion",
-      "sub": "Pada Anal / Anus",
-      "icon": "⏱️",
+      "sub": "3. Pada Anal / Anus",
+      "icon": "📥",
       "color": "#E53E3E"
     },
     {
       "id": "body-strapping",
-      "label": "Metode Body Strapping",
-      "sub": "Dililit Lakban pada Paha, Betis & Perut",
+      "label": "Metode Body Strapping (Dililit Lakban)",
+      "sub": "4. Paha, 5. Betis & 6. Perut",
       "icon": "📦",
       "color": "#38A169"
     },
     {
       "id": "body-adjacent",
       "label": "Body-Adjacent Concealment",
-      "sub": "Vagina / Pembalut & Bagian Prostetik",
+      "sub": "7. Vagina (Pembalut) & 8. Prostetik / Gips",
       "icon": "🛡️",
       "color": "#1890FF"
     }
@@ -66,9 +66,9 @@
       "id": "rongga-mulut",
       "num": "01",
       "badgeNum": 1,
-      "label": "Rongga Mulut (Metode Ingestion)",
-      "shortName": "Rongga Mulut",
-      "tag": "METODE INGESTION / SWALLOWING",
+      "label": "1. Rongga Mulut",
+      "shortName": "1. Rongga Mulut",
+      "tag": "Metode Ingestion",
       "categoryId": "ingestion",
       "categoryLabel": "Metode Ingestion",
       "color": "#F5A623",
@@ -81,16 +81,16 @@
       "coordsByAngle": {
         "0": {
           "x": 50.0,
-          "y": 12.0
+          "y": 12.5
         },
         "90": {
           "x": 55.0,
-          "y": 12.0
+          "y": 12.5
         },
         "180": null,
         "270": {
           "x": 45.0,
-          "y": 12.0
+          "y": 12.5
         }
       },
       "riskLevel": "high",
@@ -140,9 +140,9 @@
       "id": "lambung",
       "num": "02",
       "badgeNum": 2,
-      "label": "Lambung (Metode Ingestion)",
-      "shortName": "Lambung",
-      "tag": "METODE INGESTION / BODY PACKING",
+      "label": "2. Lambung",
+      "shortName": "2. Lambung",
+      "tag": "Metode Ingestion",
       "categoryId": "ingestion",
       "categoryLabel": "Metode Ingestion",
       "color": "#F5A623",
@@ -155,16 +155,16 @@
       "coordsByAngle": {
         "0": {
           "x": 50.0,
-          "y": 32.0
+          "y": 32.5
         },
         "90": {
           "x": 54.0,
-          "y": 32.0
+          "y": 32.5
         },
         "180": null,
         "270": {
           "x": 46.0,
-          "y": 32.0
+          "y": 32.5
         }
       },
       "riskLevel": "critical",
@@ -214,9 +214,9 @@
       "id": "anal-anus",
       "num": "03",
       "badgeNum": 3,
-      "label": "Pada Anal / Anus (Metode Insertion)",
-      "shortName": "Anal / Anus",
-      "tag": "METODE INSERTION / BODY PUSHING",
+      "label": "3. Pada Anal / Anus",
+      "shortName": "3. Anal / Anus",
+      "tag": "Metode Insertion",
       "categoryId": "insertion",
       "categoryLabel": "Metode Insertion",
       "color": "#E53E3E",
@@ -230,19 +230,19 @@
       "coordsByAngle": {
         "0": {
           "x": 50.0,
-          "y": 49.0
+          "y": 50.5
         },
         "90": {
-          "x": 46.0,
-          "y": 49.0
+          "x": 47.0,
+          "y": 50.5
         },
         "180": {
           "x": 50.0,
-          "y": 49.0
+          "y": 50.5
         },
         "270": {
-          "x": 54.0,
-          "y": 49.0
+          "x": 53.0,
+          "y": 50.5
         }
       },
       "riskLevel": "critical",
@@ -292,9 +292,9 @@
       "id": "strapping-paha",
       "num": "04",
       "badgeNum": 4,
-      "label": "Pada Paha (Metode Body Strapping)",
-      "shortName": "Pada Paha",
-      "tag": "METODE BODY STRAPPING / THIGH WRAP",
+      "label": "4. Pada Paha",
+      "shortName": "4. Pada Paha",
+      "tag": "Metode Body Strapping (Dililit Tape / Lakban)",
       "categoryId": "body-strapping",
       "categoryLabel": "Metode Body Strapping",
       "color": "#38A169",
@@ -307,20 +307,20 @@
       ],
       "coordsByAngle": {
         "0": {
-          "x": 41.0,
-          "y": 58.0
+          "x": 40.0,
+          "y": 58.5
         },
         "90": {
           "x": 51.0,
-          "y": 58.0
+          "y": 58.5
         },
         "180": {
-          "x": 41.0,
-          "y": 58.0
+          "x": 40.0,
+          "y": 58.5
         },
         "270": {
           "x": 49.0,
-          "y": 58.0
+          "y": 58.5
         }
       },
       "riskLevel": "high",
@@ -369,9 +369,9 @@
       "id": "strapping-betis",
       "num": "05",
       "badgeNum": 5,
-      "label": "Betis (Metode Body Strapping)",
-      "shortName": "Betis",
-      "tag": "METODE BODY STRAPPING / CALF & SHIN",
+      "label": "5. Betis",
+      "shortName": "5. Betis",
+      "tag": "Metode Body Strapping (Dililit Tape / Lakban)",
       "categoryId": "body-strapping",
       "categoryLabel": "Metode Body Strapping",
       "color": "#38A169",
@@ -384,20 +384,20 @@
       ],
       "coordsByAngle": {
         "0": {
-          "x": 40.0,
-          "y": 77.0
+          "x": 39.0,
+          "y": 77.5
         },
         "90": {
           "x": 50.0,
-          "y": 77.0
+          "y": 77.5
         },
         "180": {
-          "x": 40.0,
-          "y": 77.0
+          "x": 39.0,
+          "y": 77.5
         },
         "270": {
           "x": 50.0,
-          "y": 77.0
+          "y": 77.5
         }
       },
       "riskLevel": "medium",
@@ -446,9 +446,9 @@
       "id": "strapping-perut",
       "num": "06",
       "badgeNum": 6,
-      "label": "Perut (Metode Body Strapping)",
-      "shortName": "Perut",
-      "tag": "METODE BODY STRAPPING / ABDOMINAL WRAP",
+      "label": "6. Perut",
+      "shortName": "6. Perut",
+      "tag": "Metode Body Strapping (Dililit Tape / Lakban)",
       "categoryId": "body-strapping",
       "categoryLabel": "Metode Body Strapping",
       "color": "#38A169",
@@ -465,7 +465,7 @@
           "y": 42.0
         },
         "90": {
-          "x": 55.0,
+          "x": 56.0,
           "y": 42.0
         },
         "180": {
@@ -473,7 +473,7 @@
           "y": 42.0
         },
         "270": {
-          "x": 45.0,
+          "x": 44.0,
           "y": 42.0
         }
       },
@@ -523,9 +523,9 @@
       "id": "vagina-pembalut",
       "num": "07",
       "badgeNum": 7,
-      "label": "Pada Vagina Menggunakan Pembalut (Body-Adjacent)",
-      "shortName": "Pada Vagina / Pembalut",
-      "tag": "BODY-ADJACENT CONCEALMENT / SANITARY PAD",
+      "label": "7. Pada Vagina (Menggunakan Pembalut)",
+      "shortName": "7. Vagina (Pembalut)",
+      "tag": "Body-Adjacent Concealment",
       "categoryId": "body-adjacent",
       "categoryLabel": "Body-Adjacent Concealment",
       "color": "#1890FF",
@@ -533,21 +533,25 @@
       "visibleAngles": [
         0,
         90,
+        180,
         270
       ],
       "coordsByAngle": {
         "0": {
           "x": 50.0,
-          "y": 46.0
+          "y": 47.5
         },
         "90": {
-          "x": 48.0,
-          "y": 46.0
+          "x": 51.0,
+          "y": 47.5
         },
-        "180": null,
+        "180": {
+          "x": 50.0,
+          "y": 47.5
+        },
         "270": {
-          "x": 52.0,
-          "y": 46.0
+          "x": 49.0,
+          "y": 47.5
         }
       },
       "riskLevel": "high",
@@ -596,9 +600,9 @@
       "id": "prostetik-gips",
       "num": "08",
       "badgeNum": 8,
-      "label": "Pada Bagian Prostetik / Gips Palsu (Body-Adjacent)",
-      "shortName": "Prostetik / Gips Palsu",
-      "tag": "BODY-ADJACENT CONCEALMENT / PROSTHESIS & CAST",
+      "label": "8. Pada Bagian Prostetik / Gips Palsu",
+      "shortName": "8. Prostetik / Gips",
+      "tag": "Body-Adjacent Concealment",
       "categoryId": "body-adjacent",
       "categoryLabel": "Body-Adjacent Concealment",
       "color": "#1890FF",
@@ -612,19 +616,19 @@
       "coordsByAngle": {
         "0": {
           "x": 75.0,
-          "y": 35.0
+          "y": 36.0
         },
         "90": {
           "x": 58.0,
-          "y": 35.0
+          "y": 36.0
         },
         "180": {
           "x": 75.0,
-          "y": 35.0
+          "y": 36.0
         },
         "270": {
           "x": 42.0,
-          "y": 35.0
+          "y": 36.0
         }
       },
       "riskLevel": "high",

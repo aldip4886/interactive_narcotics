@@ -5,7 +5,7 @@ import { SCORMAdapter } from './modules/SCORMAdapter.js';
 // ─────────────────────────────────────────────────────────────
 // Application State
 // ─────────────────────────────────────────────────────────────
-let currentHotspotId = 'saluran-cerna';
+let currentHotspotId = 'rongga-mulut';
 const visitedHotspots = new Set();
 let currentActiveTab = 'tab-modus';
 let currentAngle = 0; // 0, 90, 180, 270
@@ -265,6 +265,19 @@ function openHotspotModal(id, syncAngle = false) {
   // Update pin active state
   renderHotspotsForCurrentAngle();
 
+  // Update sidebar active and visited states
+  document.querySelectorAll('.sidebar-hotspot-item').forEach(item => {
+    const itemHsId = item.getAttribute('data-hotspot-id');
+    if (itemHsId === id) {
+      item.classList.add('active');
+    } else {
+      item.classList.remove('active');
+    }
+    if (visitedHotspots.has(itemHsId)) {
+      item.classList.add('visited');
+    }
+  });
+
   // Render Modal Content
   renderModalContent(hs);
 
@@ -385,11 +398,13 @@ function setupSidebar() {
     sidebar.classList.toggle('collapsed');
   });
 
-  const moduleItems = document.querySelectorAll('.module-item');
-  moduleItems.forEach(item => {
+  const hotspotItems = document.querySelectorAll('.sidebar-hotspot-item');
+  hotspotItems.forEach(item => {
     item.addEventListener('click', () => {
-      moduleItems.forEach(m => m.classList.remove('active'));
-      item.classList.add('active');
+      const id = item.getAttribute('data-hotspot-id');
+      if (id) {
+        openHotspotModal(id, true);
+      }
     });
   });
 }
