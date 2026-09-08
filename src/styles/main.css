@@ -40,6 +40,7 @@
   --font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --sidebar-width: 230px;
   --navbar-height: 52px;
+  --body-zoom: 1.5;
 }
 
 /* Global Reset */
@@ -470,27 +471,16 @@ button {
 .full-stage-workspace {
   flex: 1;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 16px 20px;
+  flex-direction: column;
+  padding: 0;
   overflow: hidden;
-}
-
-.full-body-stage {
-  width: 100%;
-  max-width: 860px;
-  height: 100%;
   position: relative;
   background: #FFFFFF;
-  border-radius: 12px;
-  border: 1px solid var(--border-light);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
 }
 
 .rotatable-body-view {
+  width: 100%;
+  height: 100%;
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -616,31 +606,81 @@ button {
 
 .body-hotspot-pin {
   position: absolute;
-  transform: translate(-50%, calc(-100% + 5px));
+  transform: translate(-50%, -50%);
   pointer-events: auto;
   cursor: pointer;
   display: flex;
-  flex-direction: column;
   align-items: center;
-  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), filter 0.22s ease;
   z-index: 20;
 }
 
 .body-hotspot-pin:hover {
-  transform: translate(-50%, calc(-100% + 5px)) scale(1.12);
-  z-index: 30;
+  transform: translate(-50%, -50%) scale(1.35);
+  filter: drop-shadow(0 0 10px rgba(245, 166, 35, 0.9));
+  z-index: 35;
+}
+
+.body-hotspot-pin.active {
+  transform: translate(-50%, -50%) scale(1.4);
+  filter: drop-shadow(0 0 14px rgba(11, 44, 110, 0.8));
+  z-index: 40;
+}
+
+.body-hotspot-pin.active .pin-badge {
+  background: var(--djbc-gold);
+  border-color: #FFFFFF;
+  box-shadow: 0 0 12px rgba(245, 166, 35, 0.9);
+}
+
+.body-hotspot-pin.active .pin-num {
+  background: var(--djbc-navy-main);
+  color: #FFFFFF;
+}
+
+.strapping-package-badge {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: linear-gradient(135deg, #C53030 0%, #9B2C2C 100%);
+  color: #FFFFFF;
+  font-size: 9px;
+  font-weight: 800;
+  padding: 2px 7px;
+  border-radius: 6px;
+  border: 1.5px solid #FEB2B2;
+  box-shadow: 0 3px 8px rgba(197, 48, 48, 0.4);
+  margin-bottom: 3px;
+  white-space: nowrap;
+  animation: pulse-strapping 2s infinite ease-in-out;
+}
+
+@keyframes pulse-strapping {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 3px 8px rgba(197, 48, 48, 0.4);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 5px 14px rgba(197, 48, 48, 0.7);
+  }
 }
 
 .pin-badge {
   display: flex;
   align-items: center;
-  gap: 5px;
-  padding: 3px 8px;
-  border-radius: 14px;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  border-radius: 50%;
   background: #FFFFFF;
   border: 1.5px solid var(--border-medium);
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.14);
-  font-size: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  font-size: 8.5px;
   font-weight: 700;
   color: var(--djbc-navy-dark);
   white-space: nowrap;
@@ -651,54 +691,103 @@ button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 16px;
-  height: 16px;
+  width: 14px;
+  height: 14px;
   border-radius: 50%;
   background: var(--djbc-navy-main);
   color: #FFFFFF;
-  font-size: 9px;
+  font-size: 8.5px;
   font-weight: 800;
+  line-height: 1;
 }
 
 .pin-point {
   position: relative;
-  width: 10px;
-  height: 10px;
+  width: 12px;
+  height: 12px;
   border-radius: 50%;
   background: var(--djbc-gold);
   border: 2px solid #FFFFFF;
-  box-shadow: 0 0 8px rgba(245, 166, 35, 0.9);
-  margin-top: 2px;
+  box-shadow: 0 0 10px rgba(245, 166, 35, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
 }
 
-.pin-point::after {
+.body-hotspot-pin.active .pin-point {
+  background: #FFFFFF;
+  border-color: var(--djbc-gold);
+  box-shadow: 0 0 14px rgba(245, 166, 35, 1);
+}
+
+/* ─── HOTSPOT HOVER TOOLTIP (NOMOR & NAMA) ─── */
+.pin-tooltip {
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  transform-origin: 50% 100%;
+  transform: translateX(-50%) translateY(5px) scale(calc(0.9 / var(--body-zoom, 1.5)));
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(7, 30, 74, 0.94);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(245, 166, 35, 0.5);
+  box-shadow: 0 4px 14px rgba(5, 24, 51, 0.35);
+  border-radius: 5px;
+  padding: 3px 8px;
+  white-space: nowrap;
+  z-index: 60;
+  transition: opacity 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+              visibility 0.22s ease;
+}
+
+/* Tooltip downward pointer arrow */
+.pin-tooltip::after {
   content: '';
   position: absolute;
-  top: -4px;
-  left: -4px;
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  border: 1.5px solid var(--djbc-gold);
-  animation: pinPulse 2s infinite ease-out;
-  pointer-events: none;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 4px 4px 0 4px;
+  border-style: solid;
+  border-color: rgba(7, 30, 74, 0.94) transparent transparent transparent;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.25));
 }
 
-@keyframes pinPulse {
-  0% { transform: scale(0.8); opacity: 1; }
-  100% { transform: scale(2.2); opacity: 0; }
-}
-
-.body-hotspot-pin.active .pin-badge {
+.pin-tooltip-num {
   background: var(--djbc-gold);
-  border-color: #D98C10;
-  color: var(--djbc-navy-deep);
-  box-shadow: 0 4px 14px rgba(245, 166, 35, 0.5);
+  color: var(--djbc-navy-dark);
+  font-size: 8.5px;
+  font-weight: 800;
+  padding: 1px 4.5px;
+  border-radius: 3px;
+  line-height: 1.1;
+  letter-spacing: 0.2px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.18);
 }
 
-.body-hotspot-pin.active .pin-num {
-  background: var(--djbc-navy-deep);
-  color: var(--djbc-gold);
+.pin-tooltip-name {
+  color: #FFFFFF;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.1px;
+}
+
+/* Hover & Focus Animation Trigger - Inverse scaled against zoom level */
+.body-hotspot-pin:hover .pin-tooltip,
+.body-hotspot-pin.is-hovered .pin-tooltip,
+.body-hotspot-pin:focus .pin-tooltip,
+.body-hotspot-pin:focus-visible .pin-tooltip {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0) scale(calc(1 / var(--body-zoom, 1.5)));
 }
 
 /* ─── 3D PEDESTAL PLATFORM GLOW ─── */
@@ -854,16 +943,18 @@ button {
 /* ══════════════════════ 5. TABBED HOTSPOT MODAL ══════════════════════ */
 .tabbed-hotspot-modal {
   width: 92%;
-  max-width: 720px;
+  max-width: 740px;
   max-height: 88vh;
   background: #FFFFFF !important;
   border-radius: 14px;
-  box-shadow: 0 20px 50px rgba(5, 24, 51, 0.4);
+  box-shadow: 0 25px 65px rgba(5, 24, 51, 0.55);
   display: flex !important;
   flex-direction: column !important;
   overflow: hidden;
   position: relative;
-  z-index: 100000 !important;
+  pointer-events: auto !important;
+  z-index: 2147483647 !important;
+  margin: auto;
   animation: modalPop 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
@@ -892,51 +983,77 @@ button {
   display: flex;
   align-items: center;
   gap: 6px;
+  flex-wrap: wrap;
 }
 
 .detail-tag-badge {
   font-size: 9.5px;
   font-weight: 800;
   letter-spacing: 0.6px;
-  padding: 2px 7px;
+  padding: 2.5px 8px;
   border-radius: 4px;
   background: var(--djbc-gold);
   color: var(--djbc-navy-deep);
+  transition: all 0.2s ease;
 }
 
 .detail-cat-badge {
   font-size: 9.5px;
-  font-weight: 700;
+  font-weight: 800;
   letter-spacing: 0.5px;
-  padding: 2px 7px;
+  padding: 2.5px 8px;
   border-radius: 4px;
   background: #EDF2F7;
   color: var(--text-secondary);
+  transition: all 0.2s ease;
 }
 
-.detail-risk-pill {
-  font-size: 9px;
-  font-weight: 800;
-  padding: 2px 7px;
-  border-radius: 4px;
+/* ─── KATEGORI A: METODE INGESTION (Kuning Emas #F5A623) ─── */
+.detail-cat-badge.cat-ingestion {
+  background: #F5A623 !important;
+  color: #08244D !important;
+  box-shadow: 0 1px 6px rgba(245, 166, 35, 0.4);
+}
+.detail-tag-badge.cat-ingestion {
+  background: #FFF8E7 !important;
+  color: #B45309 !important;
+  border: 1px solid rgba(245, 166, 35, 0.5) !important;
 }
 
-.detail-risk-pill.risk-critical {
-  background: #FFF1F0;
-  border: 1px solid #FFA39E;
-  color: #CF1322;
+/* ─── KATEGORI B: METODE INSERTION (Merah / Koral #E53E3E) ─── */
+.detail-cat-badge.cat-insertion {
+  background: #E53E3E !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 1px 6px rgba(229, 62, 62, 0.4);
+}
+.detail-tag-badge.cat-insertion {
+  background: #FFF5F5 !important;
+  color: #C53030 !important;
+  border: 1px solid rgba(229, 62, 62, 0.45) !important;
 }
 
-.detail-risk-pill.risk-high {
-  background: #FFF7E6;
-  border: 1px solid #FFD591;
-  color: #D46B08;
+/* ─── KATEGORI C: METODE BODY STRAPPING (Hijau #38A169) ─── */
+.detail-cat-badge.cat-body-strapping {
+  background: #38A169 !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 1px 6px rgba(56, 161, 105, 0.4);
+}
+.detail-tag-badge.cat-body-strapping {
+  background: #F0FFF4 !important;
+  color: #276749 !important;
+  border: 1px solid rgba(56, 161, 105, 0.45) !important;
 }
 
-.detail-risk-pill.risk-medium {
-  background: #FEFFE6;
-  border: 1px solid #FFFB8F;
-  color: #D4B106;
+/* ─── KATEGORI D: BODY-ADJACENT CONCEALMENT (Biru / Cyan #1890FF) ─── */
+.detail-cat-badge.cat-body-adjacent {
+  background: #1890FF !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 1px 6px rgba(24, 144, 255, 0.4);
+}
+.detail-tag-badge.cat-body-adjacent {
+  background: #E6F7FF !important;
+  color: #096DD9 !important;
+  border: 1px solid rgba(24, 144, 255, 0.45) !important;
 }
 
 .card-quick-nav {
@@ -1431,6 +1548,29 @@ button {
   opacity: 1;
   visibility: visible;
   transition: opacity 0.2s ease, visibility 0.2s ease;
+}
+
+#hotspot-card-modal-overlay {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  background: rgba(5, 24, 51, 0.65) !important;
+  backdrop-filter: blur(4px) !important;
+  pointer-events: auto !important;
+  z-index: 2147483647 !important;
+  padding: 20px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  overflow: hidden !important;
+}
+
+#hotspot-card-modal-overlay.hidden {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
 }
 
 .modal-overlay.hidden {

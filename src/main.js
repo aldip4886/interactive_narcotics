@@ -9,6 +9,7 @@ let currentHotspotId = 'rongga-mulut';
 const visitedHotspots = new Set();
 let currentActiveTab = 'tab-modus';
 let currentAngle = 0; // 0, 90, 180, 270
+let isModalOpen = false;
 
 let scorm;
 let quiz;
@@ -41,8 +42,9 @@ function initApp() {
   setupResultModal();
   setupQuizTrigger();
 
-  // Initial body angle
+  // Initial body angle & default zoom 150%
   setBodyAngle(0, true);
+  applyZoom(1.5);
   updateProgressUI();
 }
 
@@ -52,7 +54,7 @@ function initApp() {
 const ANGLES = [0, 90, 180, 270];
 let isAutoPlaying = false;
 let autoPlayTimer = null;
-let currentZoom = 1.0;
+let currentZoom = 1.5;
 
 function setupRotationControls() {
   const btnPrev = document.getElementById('btn-carousel-prev');
@@ -168,7 +170,7 @@ function setupZoomControls() {
 
   btnIn?.addEventListener('click', () => applyZoom(currentZoom + 0.15));
   btnOut?.addEventListener('click', () => applyZoom(currentZoom - 0.15));
-  btnReset?.addEventListener('click', () => applyZoom(1.0));
+  btnReset?.addEventListener('click', () => applyZoom(1.5));
 
   // Wheel zoom over canvas wrapper
   canvasWrap?.addEventListener('wheel', (e) => {
@@ -187,7 +189,9 @@ function applyZoom(val) {
     container.style.transform = `scale(${currentZoom})`;
     container.style.transformOrigin = 'center center';
     container.style.transition = 'transform 0.15s ease';
+    container.style.setProperty('--body-zoom', currentZoom);
   }
+  document.documentElement.style.setProperty('--body-zoom', currentZoom);
   if (badge) {
     badge.textContent = `${Math.round(currentZoom * 100)}%`;
   }
@@ -209,7 +213,7 @@ function setBodyAngle(angle) {
 
   // Update Body Image
   const img = document.getElementById('main-body-img');
-  if (img && img.src !== angleInfo.image) {
+  if (img && !img.src.includes(angleInfo.image)) {
     img.style.opacity = '0.35';
     img.src = angleInfo.image;
     img.onload = () => {
@@ -237,28 +241,37 @@ function renderHotspotsForCurrentAngle() {
 
     const coords = hs.coordsByAngle[String(currentAngle)] || { x: 50, y: 50 };
     const isVisited = visitedHotspots.has(hs.id);
+    const isActive = isModalOpen && hs.id === currentHotspotId;
 
     const pin = document.createElement('div');
-    pin.className = `body-hotspot-pin ${hs.id === currentHotspotId ? 'active' : ''}`;
+    pin.className = `body-hotspot-pin ${isActive ? 'active' : ''} ${isVisited ? 'visited' : ''}`;
     pin.setAttribute('data-id', hs.id);
     pin.style.left = `${coords.x}%`;
     pin.style.top = `${coords.y}%`;
 
+    const cleanName = hs.label.replace(/^\d+\.\s*/, '');
+
     pin.innerHTML = `
-      <div class="pin-badge">
-        <span class="pin-num">${hs.badgeNum}</span>
-        <span class="pin-title">${hs.shortName}</span>
+      <div class="pin-point">
+        <div class="pin-pulse-ring"></div>
       </div>
-      <div class="pin-point"></div>
+      <div class="pin-tooltip" role="tooltip">
+        <span class="pin-tooltip-num">${hs.badgeNum}</span>
+        <span class="pin-tooltip-name">${cleanName}</span>
+      </div>
     `;
 
-    pin.addEventListener('pointerdown', (e) => {
-      e.stopPropagation();
-    });
+    pin.setAttribute('tabindex', '0');
+    pin.setAttribute('role', 'button');
+    pin.setAttribute('aria-label', `Hotspot ${hs.badgeNum}: ${cleanName}`);
+
+    pin.addEventListener('pointerenter', () => pin.classList.add('is-hovered'));
+    pin.addEventListener('pointerleave', () => pin.classList.remove('is-hovered'));
 
     pin.addEventListener('click', (e) => {
+      e.preventDefault();
       e.stopPropagation();
-      openHotspotModal(hs.id);
+      openHotspotModal(hs.id, true);
     });
 
     layer.appendChild(pin);
@@ -270,29 +283,25 @@ function renderHotspotsForCurrentAngle() {
 // ─────────────────────────────────────────────────────────────
 function setupDetailModal() {
   const overlay = document.getElementById('hotspot-card-modal-overlay');
+  if (overlay && overlay.parentNode !== document.body) {
+    document.body.appendChild(overlay);
+  }
+
   const btnClose = document.getElementById('btn-close-detail-modal');
   const btnFooterClose = document.getElementById('btn-modal-close-footer');
   const btnPrev = document.getElementById('btn-prev-hotspot');
   const btnNext = document.getElementById('btn-next-hotspot');
 
-  // Close handlers
-  const closeModal = () => {
-    if (overlay) {
-      overlay.classList.add('hidden');
-      overlay.style.display = 'none';
-    }
-  };
-
-  btnClose?.addEventListener('click', closeModal);
-  btnFooterClose?.addEventListener('click', closeModal);
+  btnClose?.addEventListener('click', closeHotspotModal);
+  btnFooterClose?.addEventListener('click', closeHotspotModal);
 
   overlay?.addEventListener('click', (e) => {
-    if (e.target === overlay) closeModal();
+    if (e.target === overlay) closeHotspotModal();
   });
 
   window.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && overlay && !overlay.classList.contains('hidden')) {
-      closeModal();
+    if (e.key === 'Escape' && isModalOpen) {
+      closeHotspotModal();
     }
   });
 
@@ -319,6 +328,29 @@ function setupDetailModal() {
   });
 }
 
+function toggleHotspotModal(id) {
+  // Toggle removed as requested: always open/show the modal card on hotspot click
+  openHotspotModal(id, true);
+}
+
+function closeHotspotModal() {
+  isModalOpen = false;
+  const overlay = document.getElementById('hotspot-card-modal-overlay');
+  if (overlay) {
+    overlay.classList.add('hidden');
+    overlay.style.removeProperty('display');
+    overlay.style.removeProperty('opacity');
+    overlay.style.removeProperty('visibility');
+    overlay.style.removeProperty('pointer-events');
+    overlay.style.setProperty('display', 'none', 'important');
+    overlay.style.setProperty('opacity', '0', 'important');
+    overlay.style.setProperty('visibility', 'hidden', 'important');
+    overlay.style.setProperty('pointer-events', 'none', 'important');
+  }
+
+  renderHotspotsForCurrentAngle();
+}
+
 function switchCardTab(tabId) {
   currentActiveTab = tabId;
 
@@ -338,46 +370,58 @@ function openHotspotModal(id, syncAngle = false) {
   if (!hs) return;
 
   currentHotspotId = id;
+  isModalOpen = true;
   visitedHotspots.add(id);
-  updateProgressUI();
 
-  // If syncAngle is requested or hotspot is not in current angle
-  if (syncAngle && !hs.visibleAngles.includes(currentAngle)) {
-    setBodyAngle(hs.primaryAngle, true);
-  }
-
-  // Update pin active state
-  renderHotspotsForCurrentAngle();
-
-  // Update sidebar active and visited states
-  document.querySelectorAll('.sidebar-hotspot-item').forEach(item => {
-    const itemHsId = item.getAttribute('data-hotspot-id');
-    if (itemHsId === id) {
-      item.classList.add('active');
-    } else {
-      item.classList.remove('active');
-    }
-    if (visitedHotspots.has(itemHsId)) {
-      item.classList.add('visited');
-    }
-  });
-
-  // Display overlay immediately with explicit flex display
+  // ── STEP 1: Show overlay immediately (topmost layer) ──────────
   const overlay = document.getElementById('hotspot-card-modal-overlay');
   if (overlay) {
+    if (overlay.parentNode !== document.body) {
+      document.body.appendChild(overlay);
+    }
     overlay.classList.remove('hidden');
-    overlay.style.display = 'flex';
+    overlay.style.removeProperty('display');
+    overlay.style.removeProperty('opacity');
+    overlay.style.removeProperty('visibility');
+    overlay.style.removeProperty('pointer-events');
+    overlay.style.setProperty('display', 'flex', 'important');
+    overlay.style.setProperty('opacity', '1', 'important');
+    overlay.style.setProperty('visibility', 'visible', 'important');
+    overlay.style.setProperty('pointer-events', 'auto', 'important');
+    overlay.style.setProperty('z-index', '2147483647', 'important');
   }
 
-  // Render Modal Content
+  // ── STEP 2: Render modal content ──────────────────────────────
   try {
     renderModalContent(hs);
   } catch (err) {
     console.error('Error rendering modal content:', err);
   }
 
-  // Default to Tab 1
+  // ── STEP 3: Switch to first tab ───────────────────────────────
   switchCardTab('tab-modus');
+
+  // ── STEP 4: Update progress UI safely ─────────────────────────
+  try {
+    updateProgressUI();
+  } catch (err) {
+    console.warn('Progress update error:', err);
+  }
+
+  // ── STEP 5: Sync body angle if needed ─────────────────────────
+  if (syncAngle && !hs.visibleAngles.includes(currentAngle)) {
+    setBodyAngle(hs.primaryAngle);
+  } else {
+    renderHotspotsForCurrentAngle();
+  }
+
+  // ── STEP 6: Update sidebar ────────────────────────────────────
+  document.querySelectorAll('.sidebar-hotspot-item').forEach(item => {
+    const itemHsId = item.getAttribute('data-hotspot-id');
+    item.classList.toggle('active', itemHsId === id);
+    if (visitedHotspots.has(itemHsId)) item.classList.add('visited');
+  });
+
 }
 
 function renderModalContent(hs) {
@@ -386,24 +430,29 @@ function renderModalContent(hs) {
   if (counter) counter.textContent = `${idx + 1} / ${hotspotsData.hotspots.length}`;
 
   // Header badges & title
+  const badgeRow = document.querySelector('.detail-badge-row');
   const tagBadge = document.getElementById('detail-tag-badge');
   const catBadge = document.getElementById('detail-cat-badge');
-  const riskBadge = document.getElementById('detail-risk-badge');
   const title = document.getElementById('detail-title');
   const sub = document.getElementById('detail-subtitle');
 
-  if (tagBadge) tagBadge.textContent = `MODUS #${hs.num}`;
-  if (catBadge) catBadge.textContent = hs.categoryLabel.toUpperCase();
-  if (riskBadge) {
-    riskBadge.textContent = `${hs.riskLevel.toUpperCase()} (${hs.riskScore})`;
-    riskBadge.className = `detail-risk-pill risk-${hs.riskLevel}`;
+  if (badgeRow) badgeRow.className = `detail-badge-row cat-${hs.categoryId}`;
+  if (tagBadge) {
+    tagBadge.textContent = `MODUS #${hs.num}`;
+    tagBadge.className = `detail-tag-badge cat-${hs.categoryId}`;
+  }
+  if (catBadge) {
+    catBadge.textContent = hs.categoryLabel.toUpperCase();
+    catBadge.className = `detail-cat-badge cat-${hs.categoryId}`;
   }
   if (title) title.textContent = hs.label;
   if (sub) sub.textContent = hs.tag;
 
-  // TAB 1: Modus Operandi
+  // TAB 1: Modus Operandi & Param Grid
   const mainImg = document.getElementById('detail-main-img');
   const desc = document.getElementById('detail-desc');
+  const concealmentMethod = document.getElementById('detail-concealment-method');
+  const bodyLocation = document.getElementById('detail-body-location');
   const drugTypes = document.getElementById('detail-drug-types');
   const packaging = document.getElementById('detail-packaging');
   const narrative = document.getElementById('detail-modus-narrative');
@@ -414,6 +463,8 @@ function renderModalContent(hs) {
     mainImg.alt = hs.label;
   }
   if (desc) desc.textContent = hs.description;
+  if (concealmentMethod) concealmentMethod.textContent = hs.categoryLabel || 'Modus Penyembunyian Tubuh';
+  if (bodyLocation) bodyLocation.textContent = `${hs.label} (Sudut Pandang Utama: ${hs.primaryAngle}°)`;
   if (drugTypes) drugTypes.textContent = hs.drugTypes || 'Narkotika Golongan I (Kokain, Sabu, Heroin)';
   if (packaging) packaging.textContent = hs.packagingTechnique || 'Kondom lateks berlapis, selotip kedap udara';
   if (narrative) narrative.textContent = hs.modusDetail || hs.description;
@@ -451,7 +502,7 @@ function renderModalContent(hs) {
     }
   }
 
-  // TAB 3: Detection Indicators & Actions
+  // TAB 3: Detection Indicators (Ciri Pelaku) & Actions (SOP)
   const indList = document.getElementById('detail-indicators-list');
   if (indList) {
     indList.innerHTML = '';
@@ -519,11 +570,20 @@ function updateProgressUI() {
   if (text) text.textContent = `${totalPct}%`;
   if (fill) fill.style.width = `${totalPct}%`;
 
-  if (scorm) {
-    scorm.setScore(totalPct);
-    if (totalPct >= 80) {
-      scorm.complete(totalPct);
+  try {
+    if (scorm) {
+      if (typeof scorm.setProgress === 'function') {
+        scorm.setProgress(visitedHotspots);
+      }
+      if (typeof scorm.setScore === 'function') {
+        scorm.setScore(totalPct);
+      }
+      if (totalPct >= 80 && typeof scorm.complete === 'function') {
+        scorm.complete(totalPct);
+      }
     }
+  } catch (sErr) {
+    console.warn('SCORM update notice:', sErr);
   }
 }
 

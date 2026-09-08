@@ -86,17 +86,17 @@
               <li class="sidebar-hotspot-item" data-hotspot-id="strapping-paha">
                 <span class="hs-badge-num">4</span>
                 <span class="hs-label">Pada Paha</span>
-                <span class="hs-angle-tag">0°</span>
+                <span class="hs-angle-tag">270°</span>
               </li>
               <li class="sidebar-hotspot-item" data-hotspot-id="strapping-betis">
                 <span class="hs-badge-num">5</span>
                 <span class="hs-label">Betis</span>
-                <span class="hs-angle-tag">0°</span>
+                <span class="hs-angle-tag">90°</span>
               </li>
               <li class="sidebar-hotspot-item" data-hotspot-id="strapping-perut">
                 <span class="hs-badge-num">6</span>
                 <span class="hs-label">Perut</span>
-                <span class="hs-angle-tag">0°</span>
+                <span class="hs-angle-tag">180°</span>
               </li>
             </ul>
           </div>
@@ -180,69 +180,65 @@
       <!-- Main Full-Width Body Stage -->
       <div id="content-workspace" class="full-stage-workspace">
 
-        <!-- ─── CENTRAL BODY ROTATING STAGE ─── -->
-        <section id="body-stage-container" class="full-body-stage">
-          <div id="rotatable-body-view" class="rotatable-body-view">
+        <!-- ─── CENTRAL BODY ROTATING VIEW ─── -->
+        <div id="rotatable-body-view" class="rotatable-body-view">
 
-            <!-- Angle Status Badge Bar -->
-            <div class="angle-header-bar">
-              <div class="current-angle-badge" id="current-angle-badge">
-                <span class="angle-deg" id="angle-deg-text">0°</span>
-                <span class="angle-sep">•</span>
-                <span class="angle-name" id="angle-name-text">Tampak Depan</span>
-                <span class="angle-sub" id="angle-sub-text">(Organ Pencernaan & Dada)</span>
+          <!-- Angle Status Badge Bar -->
+          <div class="angle-header-bar">
+            <div class="current-angle-badge" id="current-angle-badge">
+              <span class="angle-deg" id="angle-deg-text">0°</span>
+              <span class="angle-sep">•</span>
+              <span class="angle-name" id="angle-name-text">Tampak Depan</span>
+              <span class="angle-sub" id="angle-sub-text">(Organ Pencernaan & Dada)</span>
+            </div>
+            <div class="angle-instruction-tag">
+              <span>Klik hotspot bernomor untuk melihat rincian modus operandi</span>
+            </div>
+          </div>
+
+          <!-- Body Canvas & Hotspot Layer -->
+          <div class="body-canvas-wrapper" id="body-canvas-wrapper">
+
+            <!-- 1. Zoom Controls Dock (Bottom Left) -->
+            <div class="camera-zoom-dock" id="camera-zoom-dock">
+              <button id="btn-zoom-in" class="zoom-ctrl-btn" title="Perbesar (Zoom In)" aria-label="Zoom In">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+              </button>
+              <span id="zoom-level-text" class="zoom-level-badge">100%</span>
+              <button id="btn-zoom-out" class="zoom-ctrl-btn" title="Perkecil (Zoom Out)" aria-label="Zoom Out">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+              </button>
+              <button id="btn-zoom-reset" class="zoom-ctrl-btn reset-btn" title="Reset Zoom (100%)" aria-label="Reset Zoom">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><polyline points="3 3 3 8 8 8"></polyline></svg>
+              </button>
+            </div>
+
+            <!-- Central Active Body Image with Hotspots Layer directly anchored -->
+            <div class="body-image-container" id="body-image-container">
+              <img src="assets/body_views/body_view_0_front.png" alt="Anatomi Tubuh Peraga Manusia" id="main-body-img" class="main-body-img" />
+              <!-- 3D Pedestal Platform Glow under Feet -->
+              <div class="body-pedestal-platform"></div>
+              <!-- Interactive Hotspot Pins Layer (Positioned dynamically per angle) -->
+              <div id="hotspots-layer" class="hotspots-layer"></div>
+            </div>
+
+            <!-- 2. Kontrol Rotasi Pedestal (Center Bottom) -->
+            <div class="pedestal-rotation-dock" id="pedestal-rotation-dock">
+              <div class="pedestal-rotate-hint">
+                <span>⟲ 360° Seret untuk memutar model. ⟳</span>
               </div>
-              <div class="angle-instruction-tag">
-                <span>Klik hotspot bernomor untuk melihat rincian modus operandi</span>
+              <div class="pedestal-carousel-controls">
+                <button id="btn-carousel-prev" class="pedestal-ctrl-btn" title="Putar ke sudut sebelumnya" aria-label="Sudut Sebelumnya">‹</button>
+                <button id="btn-carousel-play" class="pedestal-ctrl-btn btn-play" title="Auto-play putar model 360° secara kontinu" aria-label="Auto-Play 360°">
+                  <span id="play-pause-icon">▶</span>
+                </button>
+                <button id="btn-carousel-next" class="pedestal-ctrl-btn" title="Putar ke sudut berikutnya" aria-label="Sudut Berikutnya">›</button>
               </div>
             </div>
 
-            <!-- Body Canvas & Hotspot Layer -->
-            <div class="body-canvas-wrapper" id="body-canvas-wrapper">
+          </div>
 
-              <!-- 1. Zoom Controls Dock (Bottom Left) -->
-              <div class="camera-zoom-dock" id="camera-zoom-dock">
-                <button id="btn-zoom-in" class="zoom-ctrl-btn" title="Perbesar (Zoom In)" aria-label="Zoom In">
-                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                </button>
-                <span id="zoom-level-text" class="zoom-level-badge">100%</span>
-                <button id="btn-zoom-out" class="zoom-ctrl-btn" title="Perkecil (Zoom Out)" aria-label="Zoom Out">
-                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                </button>
-                <button id="btn-zoom-reset" class="zoom-ctrl-btn reset-btn" title="Reset Zoom (100%)" aria-label="Reset Zoom">
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><polyline points="3 3 3 8 8 8"></polyline></svg>
-                </button>
-              </div>
-
-              <!-- Central Active Body Image with Hotspots Layer directly anchored -->
-              <div class="body-image-container" id="body-image-container">
-                <img src="assets/body_views/body_view_0_front.png" alt="Anatomi Tubuh Peraga Manusia" id="main-body-img" class="main-body-img" />
-                <!-- 3D Pedestal Platform Glow under Feet -->
-                <div class="body-pedestal-platform"></div>
-                <!-- Interactive Hotspot Pins Layer (Positioned dynamically per angle) -->
-                <div id="hotspots-layer" class="hotspots-layer"></div>
-              </div>
-
-              <!-- 2. Kontrol Rotasi Pedestal (Center Bottom) -->
-              <div class="pedestal-rotation-dock" id="pedestal-rotation-dock">
-                <div class="pedestal-rotate-hint">
-                  <span>⟲ 360° Seret untuk memutar model. ⟳</span>
-                </div>
-                <div class="pedestal-carousel-controls">
-                  <button id="btn-carousel-prev" class="pedestal-ctrl-btn" title="Putar ke sudut sebelumnya" aria-label="Sudut Sebelumnya">‹</button>
-                  <button id="btn-carousel-play" class="pedestal-ctrl-btn btn-play" title="Auto-play putar model 360° secara kontinu" aria-label="Auto-Play 360°">
-                    <span id="play-pause-icon">▶</span>
-                  </button>
-                  <button id="btn-carousel-next" class="pedestal-ctrl-btn" title="Putar ke sudut berikutnya" aria-label="Sudut Berikutnya">›</button>
-                </div>
-              </div>
-
-
-
-            </div>
-
-          </div><!-- /#rotatable-body-view -->
-        </section>
+        </div><!-- /#rotatable-body-view -->
 
       </div><!-- /#content-workspace -->
 
@@ -252,6 +248,7 @@
 
   <!-- ══════════════════════════════════ 3. TABBED HOTSPOT CARD MODAL ══════════════════════════════════ -->
   <div id="hotspot-card-modal-overlay" class="modal-overlay hidden" role="dialog" aria-modal="true">
+
     <div id="hotspot-modal-card" class="modal-card tabbed-hotspot-modal">
 
       <!-- Modal Card Header -->
@@ -260,7 +257,6 @@
           <div class="detail-badge-row">
             <span id="detail-tag-badge" class="detail-tag-badge">MODUS #01</span>
             <span id="detail-cat-badge" class="detail-cat-badge">METODE INGESTION</span>
-            <span id="detail-risk-badge" class="detail-risk-pill risk-high">TINGGI (80)</span>
           </div>
           <h3 id="detail-title" class="detail-title">1. Rongga Mulut</h3>
           <p id="detail-subtitle" class="detail-subtitle">Metode Ingestion: Penyelundupan paket narkotika di rongga mulut (sublingual/bukal).</p>
@@ -288,11 +284,11 @@
         </button>
         <button class="tab-btn" data-tab="tab-detection">
           <span class="tab-icon">🔍</span>
-          <span class="tab-label">Metode Pengungkapan</span>
+          <span class="tab-label">Ciri Pelaku & SOP</span>
         </button>
         <button class="tab-btn" data-tab="tab-risk">
           <span class="tab-icon">🚨</span>
-          <span class="tab-label">Risiko Bahaya</span>
+          <span class="tab-label">Indikator Risiko</span>
         </button>
       </div>
 
@@ -311,6 +307,14 @@
           </div>
 
           <div class="modus-params-grid">
+            <div class="param-box">
+              <span class="param-label">Metode Concealment:</span>
+              <p id="detail-concealment-method" class="param-val"></p>
+            </div>
+            <div class="param-box">
+              <span class="param-label">Lokasi Detail Tubuh:</span>
+              <p id="detail-body-location" class="param-val"></p>
+            </div>
             <div class="param-box">
               <span class="param-label">Jenis Narkotika Lazim:</span>
               <p id="detail-drug-types" class="param-val"></p>

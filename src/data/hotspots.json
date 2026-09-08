@@ -74,24 +74,16 @@
       "color": "#F5A623",
       "primaryAngle": 0,
       "visibleAngles": [
-        0,
-        90,
-        270
+        0
       ],
       "coordsByAngle": {
         "0": {
           "x": 50.0,
           "y": 10.8
         },
-        "90": {
-          "x": 60.5,
-          "y": 10.8
-        },
+        "90": null,
         "180": null,
-        "270": {
-          "x": 39.5,
-          "y": 10.8
-        }
+        "270": null
       },
       "riskLevel": "high",
       "riskScore": 80,
@@ -148,24 +140,16 @@
       "color": "#F5A623",
       "primaryAngle": 0,
       "visibleAngles": [
-        0,
-        90,
-        270
+        0
       ],
       "coordsByAngle": {
         "0": {
-          "x": 55.0,
-          "y": 31.8
+          "x": 52.0,
+          "y": 32.0
         },
-        "90": {
-          "x": 54.0,
-          "y": 31.8
-        },
+        "90": null,
         "180": null,
-        "270": {
-          "x": 46.0,
-          "y": 31.8
-        }
+        "270": null
       },
       "riskLevel": "critical",
       "riskScore": 100,
@@ -222,28 +206,16 @@
       "color": "#E53E3E",
       "primaryAngle": 180,
       "visibleAngles": [
-        0,
-        90,
-        180,
-        270
+        180
       ],
       "coordsByAngle": {
-        "0": {
-          "x": 50.0,
-          "y": 57.5
-        },
-        "90": {
-          "x": 43.0,
-          "y": 57.5
-        },
+        "0": null,
+        "90": null,
         "180": {
-          "x": 49.6,
-          "y": 57.5
+          "x": 50.0,
+          "y": 55.5
         },
-        "270": {
-          "x": 57.0,
-          "y": 57.5
-        }
+        "270": null
       },
       "riskLevel": "critical",
       "riskScore": 90,
@@ -298,28 +270,16 @@
       "categoryId": "body-strapping",
       "categoryLabel": "Metode Body Strapping",
       "color": "#38A169",
-      "primaryAngle": 0,
+      "primaryAngle": 270,
       "visibleAngles": [
-        0,
-        90,
-        180,
         270
       ],
       "coordsByAngle": {
-        "0": {
-          "x": 37.5,
-          "y": 62.0
-        },
-        "90": {
-          "x": 50.0,
-          "y": 62.0
-        },
-        "180": {
-          "x": 37.5,
-          "y": 62.0
-        },
+        "0": null,
+        "90": null,
+        "180": null,
         "270": {
-          "x": 50.0,
+          "x": 52.0,
           "y": 62.0
         }
       },
@@ -375,30 +335,18 @@
       "categoryId": "body-strapping",
       "categoryLabel": "Metode Body Strapping",
       "color": "#38A169",
-      "primaryAngle": 0,
+      "primaryAngle": 90,
       "visibleAngles": [
-        0,
-        90,
-        180,
-        270
+        90
       ],
       "coordsByAngle": {
-        "0": {
-          "x": 36.5,
-          "y": 76.0
-        },
+        "0": null,
         "90": {
-          "x": 43.0,
+          "x": 48.0,
           "y": 76.0
         },
-        "180": {
-          "x": 36.5,
-          "y": 76.0
-        },
-        "270": {
-          "x": 57.0,
-          "y": 76.0
-        }
+        "180": null,
+        "270": null
       },
       "riskLevel": "medium",
       "riskScore": 65,
@@ -452,30 +400,18 @@
       "categoryId": "body-strapping",
       "categoryLabel": "Metode Body Strapping",
       "color": "#38A169",
-      "primaryAngle": 0,
+      "primaryAngle": 180,
       "visibleAngles": [
-        0,
-        90,
-        180,
-        270
+        180
       ],
       "coordsByAngle": {
-        "0": {
-          "x": 44.0,
-          "y": 42.0
-        },
-        "90": {
-          "x": 57.0,
-          "y": 42.0
-        },
+        "0": null,
+        "90": null,
         "180": {
           "x": 50.0,
-          "y": 42.0
+          "y": 41.0
         },
-        "270": {
-          "x": 43.0,
-          "y": 42.0
-        }
+        "270": null
       },
       "riskLevel": "high",
       "riskScore": 85,
@@ -531,24 +467,16 @@
       "color": "#1890FF",
       "primaryAngle": 0,
       "visibleAngles": [
-        0,
-        90,
-        270
+        0
       ],
       "coordsByAngle": {
         "0": {
           "x": 50.0,
           "y": 52.5
         },
-        "90": {
-          "x": 52.0,
-          "y": 52.5
-        },
+        "90": null,
         "180": null,
-        "270": {
-          "x": 48.0,
-          "y": 52.5
-        }
+        "270": null
       },
       "riskLevel": "high",
       "riskScore": 80,
@@ -604,28 +532,16 @@
       "color": "#1890FF",
       "primaryAngle": 0,
       "visibleAngles": [
-        0,
-        90,
-        180,
-        270
+        0
       ],
       "coordsByAngle": {
         "0": {
-          "x": 83.0,
-          "y": 43.0
+          "x": 80.0,
+          "y": 42.0
         },
-        "90": {
-          "x": 50.0,
-          "y": 43.0
-        },
-        "180": {
-          "x": 83.0,
-          "y": 43.0
-        },
-        "270": {
-          "x": 50.0,
-          "y": 43.0
-        }
+        "90": null,
+        "180": null,
+        "270": null
       },
       "riskLevel": "high",
       "riskScore": 85,

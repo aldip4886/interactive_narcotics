@@ -1,4 +1,4 @@
-﻿/**
+/**
  * SCORMAdapter — bridges to SCORM 2004 4th Edition API.
  * Gracefully degrades to console-only if no LMS is present (standalone mode).
  */
@@ -38,6 +38,13 @@ export class SCORMAdapter {
     if (!this._ready) return;
     const data = JSON.stringify({ visited: Array.from(visitedIds), ts: Date.now() });
     this._api.SetValue('cmi.suspend_data', data.substring(0, 4096));
+    this._api.Commit('');
+  }
+
+  setScore(score) {
+    if (!this._ready) return;
+    this._api.SetValue('cmi.score.scaled', String(score / 100));
+    this._api.SetValue('cmi.score.raw',    String(score));
     this._api.Commit('');
   }
 
